@@ -2,7 +2,7 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"mlbc_model": "bcml_model.ipynb"}
+index = {"bcml_model": "bcml_model.ipynb"}
 
 modules = ["bcml_model.py"]
 

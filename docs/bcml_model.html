@@ -40,7 +40,7 @@ nb_path: "bcml_model.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="mlbc_model" class="doc_header"><code>class</code> <code>mlbc_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L6" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>mlbc_model</code>(<strong><code>model</code></strong>, <strong><code>train</code></strong>, <strong><code>test</code></strong>, <strong><code>num_bgs</code></strong>=<em><code>3</code></em>)</p>
+<h2 id="bcml_model" class="doc_header"><code>class</code> <code>bcml_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L6" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>bcml_model</code>(<strong><code>model</code></strong>, <strong><code>train</code></strong>, <strong><code>test</code></strong>, <strong><code>num_bgs</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Represents a ML binary classification model.</p>
 
@@ -63,7 +63,7 @@ nb_path: "bcml_model.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Creating-a-bcml_model-instance">Creating a <code>bcml_model</code> instance<a class="anchor-link" href="#Creating-a-bcml_model-instance"> </a></h2><p>To create a new <code>bcml_model</code> instance, three things are required.</p>
+<h2 id="Creating-a-bcml_model-instance">Creating a <a href="/bcml4pheno/bcml_model.html#bcml_model"><code>bcml_model</code></a> instance<a class="anchor-link" href="#Creating-a-bcml_model-instance"> </a></h2><p>To create a new <a href="/bcml4pheno/bcml_model.html#bcml_model"><code>bcml_model</code></a> instance, three things are required.</p>
 <p>First, you need <code>model</code>, a machine learning binary classification model: this library was designed to work with <code>scikit-learn</code> classifiers, such as <code>sklearn.linear_model.LogisticRegression</code>, <code>sklearn.ensemble.RandomForestClassifier</code>, or <code>sklearn.ensemble.GradientBoostingClassifier</code>.</p>
 <p>Second, you need <code>train</code>, a training data set. This should be a <code>numpy</code> array of shape $N \times (M + 1)$ if you have $N$ training data points and $M$ features. The first $M$ columns of <code>train</code> should contain your features, while the final column is your label: $1$ denotes signal, while $0$ or a strictly negative integer denotes background. Negative integers can be used to denote different kinds of background: i.e., $-2$ would denote the background of type $2$.</p>
 <p>Third, you need <code>test</code>, a testing data set. This should be a <code>numpy</code> array of shape $N' \times (M + 1)$ formatted the same as <code>train</code>. Typically, $N' \approx \frac{1}{3}N$.</p>
@@ -74,7 +74,7 @@ nb_path: "bcml_model.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="bcml_model-attributes"><code>bcml_model</code> attributes<a class="anchor-link" href="#bcml_model-attributes"> </a></h2><p>In addition to the arguments passed, a <code>bcml_model</code> instance has the following attributes.</p>
+<h2 id="bcml_model-attributes"><a href="/bcml4pheno/bcml_model.html#bcml_model"><code>bcml_model</code></a> attributes<a class="anchor-link" href="#bcml_model-attributes"> </a></h2><p>In addition to the arguments passed, a <a href="/bcml4pheno/bcml_model.html#bcml_model"><code>bcml_model</code></a> instance has the following attributes.</p>
 <p><code>train_preds</code>: training predictors, $N \times M$ <code>numpy</code> array, the first $M$ columns of train.</p>
 <p><code>train_labels</code>: training labels, <code>numpy</code> array of length $N$, final column of train (with negative integers mapped to $0$)</p>
 <p><code>test_preds</code>: test predictors, $N' \times M$ <code>numpy</code> array, first $M$ columns of test</p>
