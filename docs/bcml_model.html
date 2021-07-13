@@ -63,6 +63,12 @@ nb_path: "bcml_model.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Getting-up-and-running">Getting up and running<a class="anchor-link" href="#Getting-up-and-running"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Creating-a-bcml_model-instance">Creating a <a href="/bcml4pheno/bcml_model.html#bcml_model"><code>bcml_model</code></a> instance<a class="anchor-link" href="#Creating-a-bcml_model-instance"> </a></h4><p>To create a new <a href="/bcml4pheno/bcml_model.html#bcml_model"><code>bcml_model</code></a> instance, three things are required.</p>
 <p>First, you need <code>model</code>, a machine learning binary classification model: this library was designed to work with <code>scikit-learn</code> classifiers, such as <code>sklearn.linear_model.LogisticRegression</code>, <code>sklearn.ensemble.RandomForestClassifier</code>, or <code>sklearn.ensemble.GradientBoostingClassifier</code>.</p>
 <p>Second, you need <code>train</code>, a training data set. This should be a <code>numpy</code> array of shape $N \times (M + 1)$ if you have $N$ training data points and $M$ features. The first $M$ columns of <code>train</code> should contain your features, while the final column is your label: $1$ denotes signal, while $0$ or a strictly negative integer denotes background. Negative integers can be used to denote different kinds of background: i.e., $-2$ would denote the background of type $2$.</p>
@@ -84,6 +90,12 @@ nb_path: "bcml_model.ipynb"
 <p><code>test_sigs</code>: signal test data, $\overline{N} \times (M + 1)$ <code>numpy</code> array (i.e., $\overline{N} + \sum_i N_i = N'$)</p>
 <p><code>test_sigs_preds</code>: signal test data predictors, $\overline{N} \times M$ <code>numpy</code> array</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Basic-Functionality">Basic Functionality<a class="anchor-link" href="#Basic-Functionality"> </a></h2>
 </div>
 </div>
 </div>
@@ -422,6 +434,12 @@ If <code>labels</code> aren't provided, <code>self.test_labels</code> is used.</
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Phenomenology">Phenomenology<a class="anchor-link" href="#Phenomenology"> </a></h1>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -635,6 +653,12 @@ and a signal significance, computes the signal cross section required for the si
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Other-utilities">Other utilities<a class="anchor-link" href="#Other-utilities"> </a></h2>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
