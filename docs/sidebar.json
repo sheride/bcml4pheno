@@ -1,6 +1,8 @@
 {
   "bcml4pheno": {
     "Overview": "/",
-    "bcml_model": "bcml_model.html"
+    "bcml_model": "bcml_model.html",
+    "data_vis": "data_vis.html",
+    "ttbarzp": "ttbarzp.html"
   }
 }

@@ -2,9 +2,17 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"bcml_model": "bcml_model.ipynb"}
+index = {"bcml_model": "bcml_model.ipynb",
+         "plt_settings": "data_vis.ipynb",
+         "cross_section_helper": "data_vis.ipynb",
+         "get_elijah_ttbarzp_cs": "ttbarzp.ipynb",
+         "get_manuel_ttbarzp_cs": "ttbarzp.ipynb",
+         "import47Ddata": "ttbarzp.ipynb",
+         "get47Dfeatures": "ttbarzp.ipynb"}
 
-modules = ["bcml_model.py"]
+modules = ["bcml_model.py",
+           "data_vis.py",
+           "ttbarzp.py"]
 
 doc_url = "https://sheride.github.io/bcml4pheno/"
 

@@ -12,6 +12,12 @@ entries:
     - output: web,pdf
       title: bcml_model
       url: bcml_model.html
+    - output: web,pdf
+      title: data_vis
+      url: data_vis.html
+    - output: web,pdf
+      title: ttbarzp
+      url: ttbarzp.html
     output: web
     title: bcml4pheno
   output: web
