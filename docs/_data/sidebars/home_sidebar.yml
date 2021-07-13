@@ -13,8 +13,17 @@ entries:
       title: bcml_model
       url: bcml_model.html
     - output: web,pdf
+      title: data_preproc
+      url: data_preproc.html
+    - output: web,pdf
       title: data_vis
       url: data_vis.html
+    - output: web,pdf
+      title: Title
+      url: full_example.html
+    - output: web,pdf
+      title: multi_model
+      url: multi_model.html
     - output: web,pdf
       title: ttbarzp
       url: ttbarzp.html
