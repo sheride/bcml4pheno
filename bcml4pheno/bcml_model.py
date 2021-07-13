@@ -221,7 +221,7 @@ class bcml_model:
             return signal * tpr / np.sqrt(signal * tpr + background * fpr + 1e-10)
 
     def newvar2thresh(self, newvar):
-        """
+        r"""
         Helper method for `bcml.max_allowable_threshold()`, `bcml.get_tprs_fprs()`, and `bcml.best_threshold()`,
         performing change of variables from `newvar` to `threshold`
 
@@ -231,7 +231,7 @@ class bcml_model:
         return 1 - np.power(10, newvar)
 
     def thresh2newvar(self, thresh):
-        """
+        r"""
         Helper method for `bcml.max_allowable_threshold()`, `bcml.get_tprs_fprs()`, and `bcml.best_threshold()`,
         performing change of variables from `threshold` to `newvar`
 
@@ -356,7 +356,7 @@ class bcml_model:
 
     def req_sig_cs(self, lumi, bg_cs, tpr, fpr, sig=5, sepbg=False):
         """
-        Given a luminosity (in fb$^{-1}), a background cross section (in pb), a true positive rate, a false positive rate,
+        Given a luminosity (in fb$^{-1}$), a background cross section (in pb), a true positive rate, a false positive rate,
         and a signal significance, computes the signal cross section required for the signal significance to be achieved.
 
         If `sepbg` is False, background is combined and a single FPR is used; if `sepbg` is True, it is assumed that
@@ -380,5 +380,6 @@ class bcml_model:
     def refresh_model(model):
         """
         If this class gets updated, run this function on your already trained model to have it reflect the updated
+        class without retraining being necessary.
         """
         return sigbg_model(model.model, model.train, model.test)

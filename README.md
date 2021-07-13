@@ -4,6 +4,6 @@
 
 ## Install
 
-`pip install your_project_name`
+`pip install bcml4pheno`
 
 ## How to use
