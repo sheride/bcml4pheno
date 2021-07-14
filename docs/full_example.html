@@ -37,7 +37,7 @@ nb_path: "full_example.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Informed by the documentation of the <code>ttbarzp.import47data()</code> function, we can pull in all of the data files we'll need for training and testing from Google Storage.</p>
+<p>Informed by the documentation of the <code>import47data()</code> function, we can pull in all of the data files we'll need for training and testing from Google Storage.</p>
 
 </div>
 </div>
@@ -138,7 +138,7 @@ Downloading data from https://storage.googleapis.com/ttbarzp/47dim/bgnoh.npy
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Next, we can prepare data sets actually equipped for training and testing by first appending labels to our data points (using <code>datapreproc.label_predictors()</code>) and then by utilizing <code>sklearn</code>'s <code>train_test_split</code> method.</p>
+<p>Next, we can prepare data sets actually equipped for training and testing by first appending labels to our data points (using <code>label_predictors()</code>) and then by utilizing <code>sklearn</code>'s <code>train_test_split</code> method.</p>
 
 </div>
 </div>
@@ -369,7 +369,7 @@ training data is of length 1499999 while testing data is of length 500000
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can investigate our models' performances. Perhaps we can start by looking at the signal significance they achieve by default, given integrated luminosity $\mathcal{L} = 3000$ fb$^{-1}$. To do this, we're going to need signal and background yield, which we can compute using the function <code>get_elijah_ttbarzp_cs()</code>, which can pull in our information regarding sampled $Z'$ masses, their associated cross sections, and the background cross sections.</p>
+<p>Now we can investigate our models' performances. Perhaps we can start by looking at the signal significance they achieve by default, given integrated luminosity $\mathcal{L} = 3000$ fb$^{-1}$. To do this, we're going to need signal and background yield, which we can compute using the function <a href="/bcml4pheno/ttbarzp.html#get_elijah_ttbarzp_cs"><code>get_elijah_ttbarzp_cs</code></a>, which can pull in our information regarding sampled $Z'$ masses, their associated cross sections, and the background cross sections.</p>
 
 </div>
 </div>
@@ -408,7 +408,7 @@ training data is of length 1499999 while testing data is of length 500000
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We will need a signal cross section for $m_{Z'} = 4000$ GeV, which we don't have, so we shall take a quick detour to interpolate it using our <code>data_vis.cross_section_helper</code> object. In doing so, we'll update <code>masses</code> and <code>sig_css</code> to more relevant values.</p>
+<p>We will need a signal cross section for $m_{Z'} = 4000$ GeV, which we don't have, so we shall take a quick detour to interpolate it using our <a href="/bcml4pheno/data_vis.html#cross_section_helper"><code>cross_section_helper</code></a> object. In doing so, we'll update <code>masses</code> and <code>sig_css</code> to more relevant values.</p>
 
 </div>
 </div>
@@ -553,7 +553,7 @@ For Z&#39; mass = 4000 GeV, logistic regression gives a signal significance of 0
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In particular, we can get a nice visualization of signal vs $Z'$ mass, with some help from <code>matplotlib.pyplot</code> settings retrievable via <code>data_vis.get_settings()</code></p>
+<p>In particular, we can get a nice visualization of signal vs $Z'$ mass, with some help from <code>matplotlib.pyplot</code> settings retrievable via <code>get_settings()</code></p>
 
 </div>
 </div>

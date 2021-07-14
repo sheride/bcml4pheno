@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 
 # Cell
 def get_settings():
+    """
+    Returns some nice default settings for matplotlib to be used with `matplotlib.pyplot.rc_context`.
+    """
     return {'axes.labelsize': 32,
             'xtick.major.size': 10,
             'xtick.major.width': 1.5,

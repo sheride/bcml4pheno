@@ -49,6 +49,7 @@ nb_path: "data_vis.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="get_settings" class="doc_header"><code>get_settings</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L11" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_settings</code>()</p>
 </blockquote>
+<p>Returns some nice default settings for matplotlib to be used with <code>matplotlib.pyplot.rc_context</code>.</p>
 
 </div>
 
@@ -78,7 +79,7 @@ nb_path: "data_vis.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="cross_section_helper" class="doc_header"><code>class</code> <code>cross_section_helper</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>cross_section_helper</code>(<strong><code>masses</code></strong>, <strong><code>sig_css</code></strong>, <strong><code>bg_css</code></strong>, <strong><code>mass_units</code></strong>=<em><code>'GeV'</code></em>)</p>
+<h2 id="cross_section_helper" class="doc_header"><code>class</code> <code>cross_section_helper</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>cross_section_helper</code>(<strong><code>masses</code></strong>, <strong><code>sig_css</code></strong>, <strong><code>bg_css</code></strong>, <strong><code>mass_units</code></strong>=<em><code>'GeV'</code></em>)</p>
 </blockquote>
 <p>Class enabling computations and visualizations relating to signal and background cross sections</p>
 
@@ -136,7 +137,7 @@ nb_path: "data_vis.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_section_helper.sig_cs" class="doc_header"><code>cross_section_helper.sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L41" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.sig_cs</code>(<strong><code>masses</code></strong>, <strong><code>who</code></strong>=<em><code>'E'</code></em>)</p>
+<h4 id="cross_section_helper.sig_cs" class="doc_header"><code>cross_section_helper.sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.sig_cs</code>(<strong><code>masses</code></strong>, <strong><code>who</code></strong>=<em><code>'E'</code></em>)</p>
 </blockquote>
 <p>Given a mass, returns the signal cross section (in pb) through interpolation</p>
 
@@ -161,7 +162,7 @@ nb_path: "data_vis.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_section_helper.mass" class="doc_header"><code>cross_section_helper.mass</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L47" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.mass</code>(<strong><code>css</code></strong>, <strong><code>who</code></strong>=<em><code>'E'</code></em>)</p>
+<h4 id="cross_section_helper.mass" class="doc_header"><code>cross_section_helper.mass</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L50" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.mass</code>(<strong><code>css</code></strong>, <strong><code>who</code></strong>=<em><code>'E'</code></em>)</p>
 </blockquote>
 <p>Given a cross section, returns the particle mass value yielding that signal cross section</p>
 
@@ -186,7 +187,7 @@ nb_path: "data_vis.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_section_helper.absolute_max_mass_sens" class="doc_header"><code>cross_section_helper.absolute_max_mass_sens</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L53" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.absolute_max_mass_sens</code>(<strong><code>lumi</code></strong>=<em><code>3000</code></em>, <strong><code>sig</code></strong>=<em><code>5</code></em>)</p>
+<h4 id="cross_section_helper.absolute_max_mass_sens" class="doc_header"><code>cross_section_helper.absolute_max_mass_sens</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.absolute_max_mass_sens</code>(<strong><code>lumi</code></strong>=<em><code>3000</code></em>, <strong><code>sig</code></strong>=<em><code>5</code></em>)</p>
 </blockquote>
 <p>Given a luminosity and desired signal significance, returns the best-case scenario highest probeable mass
 (i.e., TPR = 1, FPR = 0)</p>
@@ -212,7 +213,7 @@ nb_path: "data_vis.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_section_helper.max_mass_sens_versus_tpr_fpr" class="doc_header"><code>cross_section_helper.max_mass_sens_versus_tpr_fpr</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.max_mass_sens_versus_tpr_fpr</code>(<strong><code>plot</code></strong>=<em><code>True</code></em>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>lumi</code></strong>=<em><code>3000</code></em>, <strong><code>tpr_bounds</code></strong>=<em><code>(0.1, 1)</code></em>, <strong><code>fpr_bounds</code></strong>=<em><code>(1e-07, 0.5)</code></em>, <strong><code>res</code></strong>=<em><code>1000</code></em>, <strong><code>cvalues</code></strong>=<em><code>None</code></em>, <strong><code>clabels</code></strong>=<em><code>None</code></em>, <strong><code>manual</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="cross_section_helper.max_mass_sens_versus_tpr_fpr" class="doc_header"><code>cross_section_helper.max_mass_sens_versus_tpr_fpr</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/data_vis.py#L63" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_section_helper.max_mass_sens_versus_tpr_fpr</code>(<strong><code>plot</code></strong>=<em><code>True</code></em>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>lumi</code></strong>=<em><code>3000</code></em>, <strong><code>tpr_bounds</code></strong>=<em><code>(0.1, 1)</code></em>, <strong><code>fpr_bounds</code></strong>=<em><code>(1e-07, 0.5)</code></em>, <strong><code>res</code></strong>=<em><code>1000</code></em>, <strong><code>cvalues</code></strong>=<em><code>None</code></em>, <strong><code>clabels</code></strong>=<em><code>None</code></em>, <strong><code>manual</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>For fixed luminosity and desired signal significance, plot the maximum mass sensitivity as a function of a
 binary classifier's true positive rate and false positive rate.</p>
