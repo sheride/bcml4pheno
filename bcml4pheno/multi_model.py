@@ -9,30 +9,43 @@ import scipy.interpolate
 # Cell
 class multi_model:
     """
-    Represents a list of `bcml_object` models, parameterized by a number
+    Represents a list of `bcml_object` models, parameterized by a number.
     """
 
     def __init__(self, models, index=None):
         self.models = models
         self.index = index if index is not None else [i for i in range(len(models))]
 
-    def get_sigs(self, signals, background, tpr=None, fpr=None, sepbg=False):
+    def get_sigs(self, signals, background, tprs=None, fprs=None, preds=None,
+                 labels=None, sepbg=False, opt=False):
+        """Returns a list of signal significances for the models in `self.models`"""
+        tprs = tprs if tprs is not None else [None] * len(self.models)
+        fprs = fprs if fprs is not None else [None] * len(self.models)
         return [
             model.significance(signal, background, tpr=tpr, fpr=fpr, sepbg=sepbg)
-            for model, signal in zip(self.models, signals)]
+            for model, signal, tpr, fpr in zip(self.models, signals, tprs, fprs)] if not opt else [
+            model.best_threshold(signal, background, preds=preds, labels=labels, sepbg=sepbg)[1]
+            for model, signal in zip(self.models, signals)
+            ]
 
-    def index2logsigF(self, signals, background, tpr=None, fpr=None, sepbg=False):
-        sigs = self.get_sigs(signals, background, tpr=None, fpr=None, sepbg=False)
+    def index2logsigF(self, signals, background, tprs=None, fprs=None, preds=None, labels=None, sepbg=False, opt=False):
+        """Returns an interpolated function giving signal significances as a function of the `index` variable"""
+        sigs = self.get_sigs(signals, background, tprs=tprs, fprs=fprs, preds=preds, labels=labels, sepbg=False, opt=opt)
         return scipy.interpolate.interp1d(self.index, np.log10(sigs), kind='cubic')
 
-    def index2thresh_opt_improvementF(self, signal, background, tpr=None, fpr=None, sepbg=False, preds=None, labels=None):
-        sigs = get_sigs(signal, background, tpr=tpr, fpr=fpr, sepbg=sepbg)
+    def index2thresh_opt_improvementF(self, signal, background, tprs=None, fprs=None, sepbg=False, preds=None,
+                                      labels=None):
+        """Returns an interpolated function giving the factor by which threshold optimization improves
+        significance as a function of the `index` variable"""
+        sigs = get_sigs(signal, background, tprs=tprs, fprs=fprs, sepbg=sepbg)
         opt_thresh_sigs = [
             model.best_threshold(signal, background, sepbg=sepbg, preds=preds, labels=labels) for model in self.models]
         improvement = [opt_thresh_sig/sig for opt_thresh_sig, sig in zip(sigs, opt_thresh_sigs)]
         return scipy.interpolate.interp1d(self.index, improvement, kind='cubic')
 
     def index2feature_importanceFs(self, features, num_features):
+        """Returns a list of feature-function pairs, where each function interpolates its associated feature's
+        importance as a function of the `index` variable"""
         feature_importancess = [model.sorted_feature_importance(features)[:num_features] for model in self.models]
         features = [[row[0] for row in feature_importances] for feature_importances in feature_importancess]
         # features present in the top "num_features" for each model in self.models

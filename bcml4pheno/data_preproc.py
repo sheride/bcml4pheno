@@ -9,7 +9,7 @@ import numpy as np
 def label_predictors(data, isSig, bgType=None):
     r"""
     Takes in $? \times M$ array of predictors ($?$ points in $\mathbb{R}^m$) and appends a
-    label to each row ($1$ if signal, $1$ or a negative integer if background) to prepare for training/testing.
+    label to each row ($1$ if signal, $0$ or a negative integer if background) to prepare for training/testing.
 
     Returns a $? \times (M + 1)$ array of labelled predictors where the final column is $0$ if `isSig` is `True`
     and either $0$ (if `bgType` isn't passed) or `bgType` (if it is passed; supposed to be a negative integer

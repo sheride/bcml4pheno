@@ -232,6 +232,9 @@ class bcml_model:
             return signal * tpr / np.sqrt(signal * tpr + fprXbackground + 1e-10)
         else:
             fpr = fpr if fpr is not None else self.fpr()
+#             print(signal, background)
+#             print(tpr[:10])
+#             print(fpr[:10])
             return signal * tpr / np.sqrt(signal * tpr + background * fpr + 1e-10)
 
     def newvar2thresh(self, newvar):
@@ -329,8 +332,8 @@ class bcml_model:
                 [np.where(probs > self.newvar2thresh(newvar),
                           np.ones_like(probs), np.zeros_like(probs)) for newvar in newvars])
             conf_matrices = [self.conf_matrix(predictions=predictions, labels=labels) for predictions in predictionss]
-            tprs = [self.tpr_cm(conf_matrix) for conf_matrix in conf_matrices]
-            fprs = [self.fpr_cm(conf_matrix) for conf_matrix in conf_matrices]
+            tprs = np.array([self.tpr_cm(conf_matrix) for conf_matrix in conf_matrices])
+            fprs = np.array([self.fpr_cm(conf_matrix) for conf_matrix in conf_matrices])
             return [newvars, tprs, fprs, probs]
 
     def best_threshold(self, signal, background, preds=None, labels=None, sepbg=False):
@@ -361,8 +364,8 @@ class bcml_model:
             best_sig = self.significance(signal, background, tpr, fprs, sepbg=sepbg)
             return [best_threshold, best_sig, tpr, fprs, tprs, fprss]
         else:
-            best_predictss = np.where(probs > best_threshold, np.ones_like(probs), np.zeros_like(probs))
-            conf_matrix = self.conf_matrix(predictions=best_predict)
+            best_predicts = np.where(probs > best_threshold, np.ones_like(probs), np.zeros_like(probs))
+            conf_matrix = self.conf_matrix(predictions=best_predicts)
             tpr = self.tpr_cm(conf_matrix)
             fpr = self.fpr_cm(conf_matrix)
             best_sig = self.significance(signal, background, tpr, fpr, sepbg=sepbg)

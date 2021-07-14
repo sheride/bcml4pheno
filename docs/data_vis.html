@@ -99,6 +99,32 @@ nb_path: "data_vis.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Getting-up-and-running">Getting up and running<a class="anchor-link" href="#Getting-up-and-running"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To create an instance of <a href="/bcml4pheno/data_vis.html#cross_section_helper"><code>cross_section_helper</code></a>, you need three things. First, you need to pass a list <code>masses</code> which contains the new particle masses for which you have cross sections. Second, you need to pass list <code>sig_css</code> which has the same length as <code>masses</code> which gives the signal cross section (in pb) associated with the elements of <code>masses</code>. Finally, you need to pass a list <code>bg_css</code> which provides the cross sections for whatever the relevant background processes are.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From these arguments, the instance of <a href="/bcml4pheno/data_vis.html#cross_section_helper"><code>cross_section_helper</code></a> produces a few other variables. These are reasonably intuitive based on the variable name: <code>m2logcsF</code>, for instance, gives an interpolated function mapping a new particle mass to $log_{10}(\sigma_s)$, the log of the associated signal cross section.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Basic-Functionality">Basic Functionality<a class="anchor-link" href="#Basic-Functionality"> </a></h3>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
