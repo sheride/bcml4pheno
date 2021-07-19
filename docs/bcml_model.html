@@ -206,7 +206,7 @@ Uses the <code>predict</code> method built into <code>scikit-learn</code> models
 a dataset ($? \times M$ <code>numpy</code> array).</p>
 <p>If <code>sepbg</code> is <code>False</code> (the default), background is combined and a list of $3$ $?_i \times M$ <code>numpy</code> arrays are returned,
 containing bin edges (partitioning $[0,1]$), signal bin contents, and background bin contents.</p>
-<p>If <code>sepbg</code> is <code>True</code>, backgrounds are differentiatedlist of $2 +$ <code>num_bgs</code> $?_i \times M$ <code>numpy</code> arrays are returned,
+<p>If <code>sepbg</code> is <code>True</code>, backgrounds are differentiated list of $2 +$ <code>num_bgs</code> $?_i \times M$ <code>numpy</code> arrays are returned,
 containing bin edges (partitioning $[0,1]$), signal bin contents, and <code>self.num_bgs</code> background bin contents.</p>
 <p>If predictors <code>preds</code> aren't provided, <code>self.test_preds</code> is used.
 If <code>labels</code> aren't provided, <code>self.test_labels</code> is used.</p>
@@ -493,7 +493,7 @@ are used, depending on the value of <code>sepbg</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.newvar2thresh" class="doc_header"><code>bcml_model.newvar2thresh</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L237" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.newvar2thresh</code>(<strong><code>newvar</code></strong>)</p>
+<h4 id="bcml_model.newvar2thresh" class="doc_header"><code>bcml_model.newvar2thresh</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L238" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.newvar2thresh</code>(<strong><code>newvar</code></strong>)</p>
 </blockquote>
 <p>Helper method for <code>bcml.max_allowable_threshold()</code>, <code>bcml.get_tprs_fprs()</code>, and <code>bcml.best_threshold()</code>,
 performing change of variables from <code>newvar</code> to <code>threshold</code></p>
@@ -520,7 +520,7 @@ performing change of variables from <code>newvar</code> to <code>threshold</code
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.thresh2newvar" class="doc_header"><code>bcml_model.thresh2newvar</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L247" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.thresh2newvar</code>(<strong><code>thresh</code></strong>)</p>
+<h4 id="bcml_model.thresh2newvar" class="doc_header"><code>bcml_model.thresh2newvar</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L248" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.thresh2newvar</code>(<strong><code>thresh</code></strong>)</p>
 </blockquote>
 <p>Helper method for <code>bcml.max_allowable_threshold()</code>, <code>bcml.get_tprs_fprs()</code>, and <code>bcml.best_threshold()</code>,
 performing change of variables from <code>threshold</code> to <code>newvar</code></p>
@@ -547,7 +547,7 @@ performing change of variables from <code>threshold</code> to <code>newvar</code
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.max_allowable_threshold" class="doc_header"><code>bcml_model.max_allowable_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L257" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.max_allowable_threshold</code>(<strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="bcml_model.max_allowable_threshold" class="doc_header"><code>bcml_model.max_allowable_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.max_allowable_threshold</code>(<strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the highest threshold such that only labelling elements of <code>self.test_pred</code> with predicted
 probabilities higher than that threshold as signal still yields 25 signal.</p>
@@ -580,7 +580,7 @@ function interpolation range (i.e., to achieve less than 25 signal events requir
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.get_tprs_fprs" class="doc_header"><code>bcml_model.get_tprs_fprs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L284" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.get_tprs_fprs</code>(<strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.get_tprs_fprs" class="doc_header"><code>bcml_model.get_tprs_fprs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L285" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.get_tprs_fprs</code>(<strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Produces (true positive rate, false positive rate) pairs for various thresholds
 for the trained model on data sets.</p>
@@ -618,7 +618,7 @@ Changes are made to both of the above depending on the value of <code>sepbg</cod
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.best_threshold" class="doc_header"><code>bcml_model.best_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L336" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.best_threshold</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.best_threshold" class="doc_header"><code>bcml_model.best_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L337" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.best_threshold</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Optimizes the threshold on a given data set ($? x M$ predictors, length $?$ labels).</p>
 
@@ -643,7 +643,7 @@ Changes are made to both of the above depending on the value of <code>sepbg</cod
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.req_sig_cs" class="doc_header"><code>bcml_model.req_sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L371" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.req_sig_cs</code>(<strong><code>lumi</code></strong>, <strong><code>bg_cs</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.req_sig_cs" class="doc_header"><code>bcml_model.req_sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L372" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.req_sig_cs</code>(<strong><code>lumi</code></strong>, <strong><code>bg_cs</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Given a luminosity (in fb$^{-1}$), a background cross section (in pb), a true positive rate, a false positive rate,
 and a signal significance, computes the signal cross section required for the signal significance to be achieved.</p>
@@ -677,7 +677,7 @@ and a signal significance, computes the signal cross section required for the si
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.save_model" class="doc_header"><code>bcml_model.save_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L388" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.save_model</code>(<strong><code>filename</code></strong>)</p>
+<h4 id="bcml_model.save_model" class="doc_header"><code>bcml_model.save_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L389" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.save_model</code>(<strong><code>filename</code></strong>)</p>
 </blockquote>
 <p>Saves the model to <code>filename.joblib</code></p>
 
@@ -702,7 +702,7 @@ and a signal significance, computes the signal cross section required for the si
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="refresh_model" class="doc_header"><code>refresh_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L395" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>refresh_model</code>(<strong><code>model</code></strong>)</p>
+<h4 id="refresh_model" class="doc_header"><code>refresh_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L396" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>refresh_model</code>(<strong><code>model</code></strong>)</p>
 </blockquote>
 <p>If this class gets updated, run this function on your already trained model to have it reflect the updated
 class without retraining being necessary.</p>

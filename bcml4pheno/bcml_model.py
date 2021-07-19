@@ -83,7 +83,7 @@ class bcml_model:
         If `sepbg` is `False` (the default), background is combined and a list of $3$ $?_i \times M$ `numpy` arrays are returned,
         containing bin edges (partitioning $[0,1]$), signal bin contents, and background bin contents.
 
-        If `sepbg` is `True`, backgrounds are differentiatedlist of $2 +$ `num_bgs` $?_i \times M$ `numpy` arrays are returned,
+        If `sepbg` is `True`, backgrounds are differentiated list of $2 +$ `num_bgs` $?_i \times M$ `numpy` arrays are returned,
         containing bin edges (partitioning $[0,1]$), signal bin contents, and `self.num_bgs` background bin contents.
 
         If predictors `preds` aren't provided, `self.test_preds` is used.
@@ -91,21 +91,21 @@ class bcml_model:
         """
 
         preds = preds if preds is not None else self.test_preds
-        labels = labels if labels is not None else self.test_labels
+        labels = labels if labels is not None else (self.test[:,-1] if sepbg else self.test_labels)
         predictions = self.predict_proba(preds)
         sig_bins, bin_edges = np.histogram(predictions[labels==1], bins=num_bins, density=True)
         sig_bins *= sig_norm
         if sepbg:
             bg_norms = bg_norm
             bg_binss = [
-                bg_norm * np.histogram(predictions[labels==-i], bins=num_bins, density=True)[0]
+                bg_norm * np.histogram(predictions[labels==-(i+1)], bins=num_bins, density=True)[0]
                 for i, bg_norm in enumerate(bg_norms)]
             if dataframe:
                 return pd.DataFrame(data=[bin_edges, sig_bins] + bg_binss, columns=['Bin Edges', 'Signal'] + ['Background {}'.format(i) for i in range(1, self.num_bgs+1)])
             else:
                 return [bin_edges, sig_bins] + bg_binss
         else:
-            bg_bins = np.histogram(predictions[labels!=1], bins=num_bins, density=True)
+            bg_bins = np.histogram(predictions[labels!=1], bins=num_bins, density=True)[0]
             if dataframe:
                 return pd.DataFrame(data=[bin_edges, sig_bins, bg_bins], columns=['Bin Edges', 'Signal', 'Background'])
             else:
@@ -226,16 +226,14 @@ class bcml_model:
         """
         tpr = tpr if tpr is not None else self.tpr()
         if sepbg:
+            backgrounds = background
             fprs = fpr if fpr is not None else [
                 self.fpr(self.predict(pred), np.zeros_like(pred[:,0])) for pred in self.test_bgs_preds]
-            fprXbackground = np.sum(np.multiply(fprs, background), axis=-1)
-            return signal * tpr / np.sqrt(signal * tpr + fprXbackground + 1e-10)
+            fprXbackground = np.sum(np.multiply(fprs, backgrounds), axis=-1)
+            return (signal * tpr) / np.sqrt(signal * tpr + fprXbackground + 1e-10)
         else:
             fpr = fpr if fpr is not None else self.fpr()
-#             print(signal, background)
-#             print(tpr[:10])
-#             print(fpr[:10])
-            return signal * tpr / np.sqrt(signal * tpr + background * fpr + 1e-10)
+            return (signal * tpr) / np.sqrt(signal * tpr + background * fpr + 1e-10)
 
     def newvar2thresh(self, newvar):
         r"""
