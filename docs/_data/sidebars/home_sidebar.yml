@@ -22,6 +22,9 @@ entries:
       title: Full Example (WIP)
       url: full_example.html
     - output: web,pdf
+      title: Title
+      url: manual_opt.html
+    - output: web,pdf
       title: multi_model
       url: multi_model.html
     - output: web,pdf
