@@ -16,56 +16,50 @@ class bcml_model:
     Represents a machine learning (ML) binary classification (BC) model.
     """
 
-    def __init__(self, model, train, test, num_bgs=3):
+    def __init__(self, model):
+                 # , train, test, num_bgs=3):
         self.model = model
-        self.train = train
-        self.test = test
-        self.num_bgs = num_bgs
-        self.train_preds = train[:,:-1]
-        self.train_labels = np.where(train[:,-1]==1, np.ones_like(train[:,-1]), np.zeros_like(train[:,-1]))
-        self.test_preds = test[:,:-1]
-        self.test_labels = np.where(test[:,-1]==1, np.ones_like(test[:,-1]), np.zeros_like(test[:,-1]))
-        self.test_bgs = [self.test[self.test[:,-1] == -i] for i in range(1,self.num_bgs+1)]
-        self.test_bgs_preds = [data[:,:-1] for data in self.test_bgs]
-        self.test_sigs = self.test[self.test[:,-1] == 1]
-        self.test_sigs_preds = self.test_sigs[:,:-1]
+#         self.train = train
+#         self.test = test
+#         self.num_bgs = num_bgs
+#         self.train_preds = train[:,:-1]
+#         self.train_labels = np.where(train[:,-1]==1, np.ones_like(train[:,-1]), np.zeros_like(train[:,-1]))
+#         self.test_preds = test[:,:-1]
+#         self.test_labels = np.where(test[:,-1]==1, np.ones_like(test[:,-1]), np.zeros_like(test[:,-1]))
+#         self.test_bgs = [self.test[self.test[:,-1] == -i] for i in range(1,self.num_bgs+1)]
+#         self.test_bgs_preds = [data[:,:-1] for data in self.test_bgs]
+#         self.test_sigs = self.test[self.test[:,-1] == 1]
+#         self.test_sigs_preds = self.test_sigs[:,:-1]
 
-    def fit(self, preds=None, labels=None):
-        """
+    def fit(self, preds, labels):
+        r"""
         Fits `model` to data.
 
-        If predictors `preds` and labels `labels` aren't provided,
-        `self.train_preds` and `self.train_labels` are used, respectively.
+        `preds` should be ? $\times$ $m$ for model with $m$ features. `labels` should
+        be ? $\times$ 1 and take values in $\{0,1\}$.
         """
-        preds = preds if preds is not None else self.train_preds
-        labels = labels if labels is not None else self.train_labels
         self.model.fit(preds, labels)
 
-    def predict_proba(self, preds=None):
+    def predict_proba(self, preds):
         r"""
-        Predicts signal probability for each element of a dataset ($? \times M$ `numpy` array).
+        Predicts signal probability for each element of a dataset ($? \times m$ `numpy` array).
 
-        Returns `numpy` array of length $M$ with values in $[0,1]$ giving predicted signal probabilities.
-
-        If predictors `preds` aren't provided, `self.test_preds` is used.
-        Uses the `predict_proba` method built into `scikit-learn` models.
+        Returns `numpy` array of with values in $[0,1]$ giving predicted signal probabilities for
+        each data point.
         """
-        preds = preds if preds is not None else self.test_preds
         try:
             return self.model.predict_proba(preds)[:,1]
         except:
             print("self.model doesn't have a predict_proba function")
 
-    def predict(self, preds=None, threshold=None):
-        """
-        Predicts signal ($1$) or background ($2$) for each element of a dataset ($? \times M$ `numpy` array).
+    def predict(self, preds, threshold=None):
+        r"""
+        Predicts signal ($1$) or background ($0$) for each element of a dataset ($? \times m$ `numpy` array).
 
-        Returns `numpy` array of length $M$ with values in $\{0,1\}$ giving predicted classifications.
+        Returns `numpy` array of length with values in $\{0,1\}$ giving predicted classifications.
 
-        If predictors `preds` aren't provided, `self.test_preds` is used.
         Uses the `predict` method built into `scikit-learn` models.
         """
-        preds = preds if preds is not None else self.test_preds
         if threshold is not None:
             probs = self.model.predict_proba(preds)[:,1]
             return np.where(probs > threshold, np.ones_like(probs), np.zeros_like(probs))
@@ -75,23 +69,20 @@ class bcml_model:
             except:
                 print("self.model doesn't have a predict function")
 
-    def predict_hist(self, preds=None, labels=None, num_bins=100, sepbg=False, sig_norm=1, bg_norm=1, dataframe=False):
+    def predict_hist(self, preds, labels, num_bins=100, sepbg=False, sig_norm=1, bg_norm=1, dataframe=False):
         r"""
         Constructs a histogram of predicted signal probabilities for signal and background constituents of
         a dataset ($? \times M$ `numpy` array).
 
-        If `sepbg` is `False` (the default), background is combined and a list of $3$ $?_i \times M$ `numpy` arrays are returned,
-        containing bin edges (partitioning $[0,1]$), signal bin contents, and background bin contents.
+        If `sepbg` is `False` (the default), labels are assumed to take values in $\{0,1\}$. Backgrounds are treated in combination:
+        a list of $3$ $?_i \times m$ `numpy` arrays are returned, containing bin edges (partitioning $[0,1]$),
+        signal bin contents, and background bin contents.
 
-        If `sepbg` is `True`, backgrounds are differentiated list of $2 +$ `num_bgs` $?_i \times M$ `numpy` arrays are returned,
-        containing bin edges (partitioning $[0,1]$), signal bin contents, and `self.num_bgs` background bin contents.
-
-        If predictors `preds` aren't provided, `self.test_preds` is used.
-        If `labels` aren't provided, `self.test_labels` is used.
+        If `sepbg` is `True`, labels are assumed to take values in $\{-n,\dots,-1,1\}$ (if there are $n$ backgrounds) while
+        `bg_norm` should be a list of length $n$. Backgrounds are then differentiated: a list of $2 + n$ `numpy` arrays of shape
+        $?_i \times m$ are returned, containing bin edges (partitioning $[0,1]$), signal bin contents, and
+        `self.num_bgs` background bin contents.
         """
-
-        preds = preds if preds is not None else self.test_preds
-        labels = labels if labels is not None else (self.test[:,-1] if sepbg else self.test_labels)
         predictions = self.predict_proba(preds)
         sig_bins, bin_edges = np.histogram(predictions[labels==1], bins=num_bins, density=True)
         sig_bins *= sig_norm
@@ -124,7 +115,7 @@ class bcml_model:
                 print("It looks like self.model doesn't have an attribute 'feature_importances_'")
 
     def sorted_feature_importance(self, features):
-        """
+        r"""
         Returns list of features sorted by importance.
 
         Given arguments `features` and `importances`, lists of length $M$, returns list of size $M \times 2$ where
@@ -134,21 +125,16 @@ class bcml_model:
         ranked_indices = np.argsort(-np.abs(importances))
         return [[features[i], importances[i]] for i in ranked_indices]
 
-    def accuracy(self, preds=None, labels=None, threshold=None):
+    def accuracy(self, preds, labels, threshold=None):
         r"""
-        Computes model accuracy on a dataset ($? x M$ predictors, length $?$ labels).
+        Computes model accuracy on a dataset ($? x m$ predictors, length $?$ labels).
 
         Returns value in $[0,1]$ giving model accuracy on the provided predictors and labels.
-
-        If predictors `preds` aren't provided, `self.test_preds` is used.
-        If `labels` aren't provided, `self.test_labels` is used.
         """
-        preds = preds if preds is not None else self.test_preds
-        labels = labels if labels is not None else self.test_labels
         predictions = self.predict(preds=preds, threshold=threshold)
         return len(preds) - np.sum(np.abs(predictions - labels)) / len(preds)
 
-    def conf_matrix(self, predictions=None, labels=None):
+    def conf_matrix(self, labels, predictions=None, preds=None):
         r"""
         Computes the confusion matrix of the trained model on a dataset ($? x M$ predictors, length $?$ labels).
 
@@ -157,9 +143,13 @@ class bcml_model:
         If predictors `preds` aren't provided, `self.test_preds` is used.
         If `labels` aren't provided, `self.test_labels` is used.
         """
-        predictions = predictions if predictions is not None else self.predict(self.test_preds)
-        labels = labels if np.any(labels) is not None else self.test_labels
-        return skm.confusion_matrix(labels, predictions, labels=[0,1])
+        if predictions is not None:
+            return skm.confusion_matrix(labels, predictions, labels=[0,1])
+        elif preds is not None:
+            return skm.confusion_matrix(labels, self.predict(preds), labels=[0,1])
+        else:
+            raise ValueError('Either predictions or preds must be passed.')
+
 
     def tpr_cm(self, conf_matrix):
         """
@@ -179,35 +169,25 @@ class bcml_model:
         """
         return conf_matrix[0,1]/np.sum(conf_matrix[0])
 
-    def tpr(self, predictions=None, labels=None):
+    def tpr(self, labels, predictions=None, preds=None):
         r"""
         Computes the true positive rate (tpr; correctly identified signal/total signal)
         of a trained model given predictions and labels (both `numpy` array of length $?$ with values in $\{0,1\}$)
 
         Returns value in $[0,1]$.
-
-        If `predictions` aren't provided, `self.predict(self.test_preds)` is used.
-        If `labels` aren't provided, `self.test_labels` is used.
         """
-        predictions = predictions if predictions is not None else self.predict(self.test_preds)
-        labels = labels if labels is not None else self.test_labels
-        return self.tpr_cm(self.conf_matrix(predictions, labels))
+        return self.tpr_cm(self.conf_matrix(labels, predictions=predictions, preds=preds))
 
-    def fpr(self, predictions=None, labels=None):
+    def fpr(self, labels, predictions=None, preds=None):
         r"""
         Computes the false positive rate (fpr; misidentified background/total background)
         of a trained model given predictions and labels (both `numpy` array of length $?$ with values in $\{0,1\}$)
 
         Returns value in $[0,1]$.
-
-        If `predictions` aren't provided, `self.predict(self.test_preds)` is used.
-        If `labels` aren't provided, `self.test_labels` is used.
         """
-        predictions = predictions if predictions is not None else self.predict(self.test_preds)
-        labels = labels if labels is not None else self.test_labels
-        return self.fpr_cm(self.conf_matrix(predictions, labels))
+        return self.fpr_cm(self.conf_matrix(labels, predictions=predictions, preds=preds))
 
-    def significance(self, signal, background, tpr=None, fpr=None, sepbg=False):
+    def significance(self, signal, background, tpr, fpr, sepbg=False):
         r"""
         Computes signal significance of a trained model given signal and background yield.
 
@@ -219,20 +199,13 @@ class bcml_model:
         `background` should be a list of length `self.num_bgs` where the $i$th element contains background yield of the $i$th
         background type. `fpr`, if passed, is then also a list of length `self.num_bgs` giving false positive rates for each
         of the background types.
-
-        If `tpr` isn't provided, `self.tpr()` is used.
-        If `fpr` isn't provided, `self.fpr()` or a list of false positive rates coming from `self.test_bgs`
-        are used, depending on the value of `sepbg`.
         """
-        tpr = tpr if tpr is not None else self.tpr()
         if sepbg:
             backgrounds = background
-            fprs = fpr if fpr is not None else [
-                self.fpr(self.predict(pred), np.zeros_like(pred[:,0])) for pred in self.test_bgs_preds]
+            fprs = fpr
             fprXbackground = np.sum(np.multiply(fprs, backgrounds), axis=-1)
             return (signal * tpr) / np.sqrt(signal * tpr + fprXbackground + 1e-10)
         else:
-            fpr = fpr if fpr is not None else self.fpr()
             return (signal * tpr) / np.sqrt(signal * tpr + background * fpr + 1e-10)
 
     def newvar2thresh(self, newvar):
@@ -242,7 +215,6 @@ class bcml_model:
 
         In particular, threshold $= 1 - 10^{\text{newvar}}$
         """
-
         return 1 - np.power(10, newvar)
 
     def thresh2newvar(self, thresh):
@@ -252,10 +224,9 @@ class bcml_model:
 
         In particular, newvar $= \log_{10}(1 - \text{threhold})$
         """
-
         return np.log10(1 - thresh)
 
-    def max_allowable_threshold(self, preds=None, labels=None):
+    def max_allowable_threshold(self, preds, labels):
         """
         Returns the highest threshold such that only labelling elements of `self.test_pred` with predicted
         probabilities higher than that threshold as signal still yields 25 signal.
@@ -264,15 +235,9 @@ class bcml_model:
         require $5^2 = 25$ signal events, hence we cannot chose a threshold so high that we do not keep at least
         25 signal events.
 
-        If predictors `preds` aren't provided, `self.test_preds` is used.
-        If `labels` aren't provided, `self.test_labels` is used.
-
         NOTE: this function frequently returns an extrapolation error as $25$ frequently falls outside of the
         function interpolation range (i.e., to achieve less than 25 signal events requires coming extremely close to $1$).
         """
-
-        preds = preds if preds is not None else self.test_preds
-        labels = labels if labels is not None else self.test_labels
         newvars = np.concatenate((np.linspace(-8, -2, 10, endpoint=False), np.linspace(-2, 0, 51, endpoint=False)))
         probs = self.model.predict_proba(preds)[:,1]
         predicts = np.array(
@@ -282,45 +247,39 @@ class bcml_model:
         f = scipy.interpolate.interp1d(num_sig, newvars, kind='cubic')
         return self.newvar2thresh(f(25))
 
-    def get_tprs_fprs(self, preds=None, labels=None, sepbg=False):
+    def get_tprs_fprs(self, preds, labels, sepbg=False):
         """
         Produces (true positive rate, false positive rate) pairs for various thresholds
         for the trained model on data sets.
 
-        If `sepbg` is `True`, background is combined and a list of length $4$ is returned containing a list of $L$ sampled
-        newvars (a convenient change of variable to approach arbitrarily close to 1: related to thresholds by
-        `bcml_model.newvar2thresh()`), an $L$-list of tprs associated to those thresholds, an $L$-list of fprs
+        If `sepbg` is `True`, labels should take values in $\{-n,\dots,-1,1\}$. Background is combined and a list of length $4$
+        is returned containing a list of $L$ sampled newvars (a convenient change of variable to approach arbitrarily close to 1:
+        related to thresholds by  `bcml_model.newvar2thresh()`), an $L$-list of tprs associated to those thresholds, an $L$-list of fprs
         related to those thresholds, and an $L$-list of length $?$ `numpy` arrays giving the predicted signal probabilities
         for the given data set.
 
-        If `sepbg` is `Frue`, background is split and a list of length $4$ `self.num_bgs` is returned containing a
-        list of $L$ sampled newvars, an $L$-list of tprs associated to those thresholds, an $L$-list of lists of length
-        `self.num_bgs` containing fprs for each background type for each threshold, and an $L$-list of length $?$
-        `numpy` arrays giving the predicted signal probabilities for the given data set.
-
-        If predictors `preds` aren't provided, `self.test_preds` is used.
-        If `labels` aren't provided, `self.test_labels` is used.
-        Changes are made to both of the above depending on the value of `sepbg`.
+        If `sepbg` is `Frue`, labels should take values in $\{0,1\}$. Background is split and a list of length $4$ `self.num_bgs`
+        is returned containing a  list of $L$ sampled newvars, an $L$-list of tprs associated to those thresholds, an $L$-list of lists of length
+        $n$ (number of backgrounds) containing fprs for each background type for each threshold, and an $L$-list of length $?$
         """
-
         # setting up variables
-        preds = preds if preds is not None else ([self.test_sigs_preds] + self.test_bgs_preds if sepbg else self.test_preds)
-        labels = labels if labels is not None else ([np.ones_like(preds[0][:,0])] + [np.zeros_like(bg_preds[:,0]) for bg_preds in preds[1:]] if sepbg else self.test_labels)
         min_newvar, max_newvar = [-10, 0]
         newvars = np.concatenate((np.linspace(min_newvar, -2, 10, endpoint=False), np.linspace(-2, max_newvar, 15, endpoint=False)))
 
-        # computing significance as a function of threshold
+        # computing tprs, fprs
         if sepbg:
-            predss = preds
-            labelss = labels
+            num_bgs = len(np.unique(labels)) - 1
+            labelTypes = [1] + [-(i+1) for i in range(num_bgs)]
+            labelsIndices = [np.where(labels==i)[0] for i in labelTypes]
+            predss = [preds[indices] for indices in labelsIndices]
             probss = [self.predict_proba(preds) for preds in predss]
             predictionsss = np.array(
                 [[np.where(probs > self.newvar2thresh(newvar),
                           np.ones_like(probs), np.zeros_like(probs)) for probs in probss] for newvar in newvars])
             sig_conf_matrices = [
-                self.conf_matrix(predictions=predictionss[0], labels=labelss[0]) for predictionss in predictionsss]
+                self.conf_matrix(labels=np.ones_like(predictionss[0]), predictions=predictionss[0]) for predictionss in predictionsss]
             bg_conf_matricess = [
-                [self.conf_matrix(predictions=predictions, labels=labelss[i+1]) for i, predictions in enumerate(predictionss[1:])] for predictionss in predictionsss]
+                [self.conf_matrix(labels=np.zeros_like(predictions), predictions=predictions) for i, predictions in enumerate(predictionss[1:])] for predictionss in predictionsss]
             tprs = np.array([self.tpr_cm(conf_matrix) for conf_matrix in sig_conf_matrices])
             fprss = np.array([[self.fpr_cm(conf_matrix) for conf_matrix in conf_matrices] for conf_matrices in bg_conf_matricess])
             sums = tprs + np.sum(fprss, axis=1)
@@ -331,20 +290,17 @@ class bcml_model:
             predictionss = np.array(
                 [np.where(probs > self.newvar2thresh(newvar),
                           np.ones_like(probs), np.zeros_like(probs)) for newvar in newvars])
-            conf_matrices = [self.conf_matrix(predictions=predictions, labels=labels) for predictions in predictionss]
+            conf_matrices = [self.conf_matrix(labels=labels, predictions=predictions) for predictions in predictionss]
             tprs = np.array([self.tpr_cm(conf_matrix) for conf_matrix in conf_matrices])
             fprs = np.array([self.fpr_cm(conf_matrix) for conf_matrix in conf_matrices])
             sums = tprs + fprs
             cutoff = len(sums) - np.argmax(np.flip(sums)==0) + 1 if 0 in sums else 0
             return [newvars[cutoff:], tprs[cutoff:], fprs[cutoff:], probs]
 
-    def best_threshold(self, signal, background, preds=None, labels=None, sepbg=False):
+    def best_threshold(self, signal, background, preds, labels, sepbg=False):
         """
         Optimizes the threshold on a given data set ($? x M$ predictors, length $?$ labels).
         """
-
-        preds = preds if preds is not None else ([self.test_sigs_preds] + self.test_bgs_preds if sepbg else self.test_preds)
-        labels = labels if labels is not None else ([np.ones_like(preds[0][:,0])] + [np.zeros_like(bg_preds[:,0]) for bg_preds in preds[1:]] if sepbg else self.test_labels)
         newvars, tprs, fprs, probs = self.get_tprs_fprs(preds, labels, sepbg)
         significances = -self.significance(signal, background, tprs, fprs, sepbg=sepbg)
 
@@ -360,18 +316,17 @@ class bcml_model:
         best_threshold = self.newvar2thresh(res.x[0])
         if sepbg:
             probss = probs
-            labelss = labels
             fprss = fprs
             best_predictss = [np.where(probs > best_threshold, np.ones_like(probs), np.zeros_like(probs)) for probs in probss]
-            sig_conf_matrix = self.conf_matrix(predictions=best_predictss[0], labels=labelss[0])
-            bg_conf_matrices = [self.conf_matrix(predictions=best_predicts, labels=labelss[i+1]) for i, best_predicts in enumerate(best_predictss[1:])]
+            sig_conf_matrix = self.conf_matrix(labels=np.ones_like(best_predictss[0]), predictions=best_predictss[0])
+            bg_conf_matrices = [self.conf_matrix(labels=np.zeros_like(best_predicts), predictions=best_predicts) for i, best_predicts in enumerate(best_predictss[1:])]
             tpr = self.tpr_cm(sig_conf_matrix)
             fprs = [self.fpr_cm(conf_matrix) for conf_matrix in bg_conf_matrices]
             best_sig = self.significance(signal, background, tpr, fprs, sepbg=sepbg)
             return [best_threshold, best_sig, tpr, fprs, tprs, fprss]
         else:
             best_predicts = np.where(probs > best_threshold, np.ones_like(probs), np.zeros_like(probs))
-            conf_matrix = self.conf_matrix(predictions=best_predicts)
+            conf_matrix = self.conf_matrix(labels=labels, predictions=best_predicts)
             tpr = self.tpr_cm(conf_matrix)
             fpr = self.fpr_cm(conf_matrix)
             best_sig = self.significance(signal, background, tpr, fpr, sepbg=sepbg)
@@ -383,9 +338,8 @@ class bcml_model:
         and a signal significance, computes the signal cross section required for the signal significance to be achieved.
 
         If `sepbg` is False, background is combined and a single FPR is used; if `sepbg` is True, it is assumed that
-        `bg_cs`, `fpr` are each lists of length `self.num_bgs` and their vector dot product is used for background yield.
+        `bg_cs`, `fpr` are each lists of length $n$ (number of backgrounds) and their vector dot product is used for background yield.
         """
-
         conv = 10**15 / 10**12
         if sepbg:
             bg = np.sum(np.multiply(bg_cs, fpr))
@@ -406,4 +360,4 @@ def refresh_model(model):
         If this class gets updated, run this function on your already trained model to have it reflect the updated
         class without retraining being necessary.
         """
-        return bcml_model(model.model, model.train, model.test)
+        return bcml_model(model.model)
