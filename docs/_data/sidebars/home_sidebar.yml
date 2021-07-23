@@ -25,9 +25,6 @@ entries:
       title: Title
       url: manual_opt.html
     - output: web,pdf
-      title: multi_model
-      url: multi_model.html
-    - output: web,pdf
       title: ttbarzp
       url: ttbarzp.html
     output: web

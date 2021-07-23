@@ -618,7 +618,7 @@ Changes are made to both of the above depending on the value of <code>sepbg</cod
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.best_threshold" class="doc_header"><code>bcml_model.best_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L337" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.best_threshold</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.best_threshold" class="doc_header"><code>bcml_model.best_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L341" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.best_threshold</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>preds</code></strong>=<em><code>None</code></em>, <strong><code>labels</code></strong>=<em><code>None</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Optimizes the threshold on a given data set ($? x M$ predictors, length $?$ labels).</p>
 
@@ -643,7 +643,7 @@ Changes are made to both of the above depending on the value of <code>sepbg</cod
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.req_sig_cs" class="doc_header"><code>bcml_model.req_sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L372" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.req_sig_cs</code>(<strong><code>lumi</code></strong>, <strong><code>bg_cs</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.req_sig_cs" class="doc_header"><code>bcml_model.req_sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L380" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.req_sig_cs</code>(<strong><code>lumi</code></strong>, <strong><code>bg_cs</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Given a luminosity (in fb$^{-1}$), a background cross section (in pb), a true positive rate, a false positive rate,
 and a signal significance, computes the signal cross section required for the signal significance to be achieved.</p>
@@ -662,6 +662,25 @@ and a signal significance, computes the signal cross section required for the si
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>The formula used by <code>req_sig_cs</code> arises as follows.</p>
+<p>We know that
+{% raw %}
+$$\mathcal{S} = \frac{S \cdot \text{TPR}}{\sqrt{S \cdot \text{TPR} + B \cdot \text{FPR}}} = \frac{\mathcal{L} \cdot \sigma_s \cdot \text{TPR}}{\sqrt{\mathcal{L} \cdot \sigma_s \cdot \text{TPR} + \mathcal{L} \cdot \sigma_s \cdot \text{FPR}}}$$
+{% endraw %}
+We can work toward solving for $\sigma_s$ as follows.
+\begin{align}
+    \mathcal{S} &amp;= \frac{\mathcal{L} \cdot \sigma_s \cdot \text{TPR}}{\sqrt{\mathcal{L} \cdot \sigma_s \cdot \text{TPR} + \mathcal{L} \cdot \sigma_b \cdot \text{FPR}}} \\
+    \mathcal{S} \left(\sqrt{\mathcal{L} \cdot \sigma_s \cdot \text{TPR} + \mathcal{L} \cdot \sigma_b \cdot \text{FPR}}\right)&amp;= \mathcal{L} \cdot \sigma_s \cdot \text{TPR} \\
+    \mathcal{S}^2 \left(\sigma_s \cdot \text{TPR} + \sigma_b \cdot \text{FPR}\right) &amp;= \mathcal{L} \cdot \sigma_s^2 \cdot \text{TPR}^2 \\
+    0 &amp;= -\left(\mathcal{L} \cdot \text{TPR}^2\right)\sigma_s^2 + \left(\mathcal{S}^2 \cdot \text{TPR}\right)\sigma_s + \left(\mathcal{S}^2 \cdot \sigma_b \cdot \text{FPR}\right)
+\end{align}
+This is then easily solvable using the quadratic formula.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Other-utilities">Other utilities<a class="anchor-link" href="#Other-utilities"> </a></h3>
 </div>
 </div>
@@ -677,7 +696,7 @@ and a signal significance, computes the signal cross section required for the si
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.save_model" class="doc_header"><code>bcml_model.save_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L389" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.save_model</code>(<strong><code>filename</code></strong>)</p>
+<h4 id="bcml_model.save_model" class="doc_header"><code>bcml_model.save_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L397" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.save_model</code>(<strong><code>filename</code></strong>)</p>
 </blockquote>
 <p>Saves the model to <code>filename.joblib</code></p>
 
@@ -702,7 +721,7 @@ and a signal significance, computes the signal cross section required for the si
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="refresh_model" class="doc_header"><code>refresh_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L396" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>refresh_model</code>(<strong><code>model</code></strong>)</p>
+<h4 id="refresh_model" class="doc_header"><code>refresh_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L404" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>refresh_model</code>(<strong><code>model</code></strong>)</p>
 </blockquote>
 <p>If this class gets updated, run this function on your already trained model to have it reflect the updated
 class without retraining being necessary.</p>

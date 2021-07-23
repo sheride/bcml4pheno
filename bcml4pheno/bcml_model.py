@@ -306,8 +306,8 @@ class bcml_model:
         # setting up variables
         preds = preds if preds is not None else ([self.test_sigs_preds] + self.test_bgs_preds if sepbg else self.test_preds)
         labels = labels if labels is not None else ([np.ones_like(preds[0][:,0])] + [np.zeros_like(bg_preds[:,0]) for bg_preds in preds[1:]] if sepbg else self.test_labels)
-        min_newvar, max_newvar = [-8, 0]
-        newvars = np.concatenate((np.linspace(min_newvar, -2, 10, endpoint=False), np.linspace(-2, max_newvar, 51, endpoint=False)))
+        min_newvar, max_newvar = [-10, 0]
+        newvars = np.concatenate((np.linspace(min_newvar, -2, 10, endpoint=False), np.linspace(-2, max_newvar, 15, endpoint=False)))
 
         # computing significance as a function of threshold
         if sepbg:
@@ -323,7 +323,9 @@ class bcml_model:
                 [self.conf_matrix(predictions=predictions, labels=labelss[i+1]) for i, predictions in enumerate(predictionss[1:])] for predictionss in predictionsss]
             tprs = np.array([self.tpr_cm(conf_matrix) for conf_matrix in sig_conf_matrices])
             fprss = np.array([[self.fpr_cm(conf_matrix) for conf_matrix in conf_matrices] for conf_matrices in bg_conf_matricess])
-            return [newvars, tprs, fprss, probss]
+            sums = tprs + np.sum(fprss, axis=1)
+            cutoff = len(sums) - np.argmax(np.flip(sums)==0) + 1 if 0 in sums else 0
+            return [newvars[cutoff:], tprs[cutoff:], fprss[cutoff:], probss]
         else:
             probs = self.predict_proba(preds)
             predictionss = np.array(
@@ -332,7 +334,9 @@ class bcml_model:
             conf_matrices = [self.conf_matrix(predictions=predictions, labels=labels) for predictions in predictionss]
             tprs = np.array([self.tpr_cm(conf_matrix) for conf_matrix in conf_matrices])
             fprs = np.array([self.fpr_cm(conf_matrix) for conf_matrix in conf_matrices])
-            return [newvars, tprs, fprs, probs]
+            sums = tprs + fprs
+            cutoff = len(sums) - np.argmax(np.flip(sums)==0) + 1 if 0 in sums else 0
+            return [newvars[cutoff:], tprs[cutoff:], fprs[cutoff:], probs]
 
     def best_threshold(self, signal, background, preds=None, labels=None, sepbg=False):
         """
@@ -345,8 +349,12 @@ class bcml_model:
         significances = -self.significance(signal, background, tprs, fprs, sepbg=sepbg)
 
         # interpolating significance as a function of threshold, then maximizing
-        f = scipy.interpolate.interp1d(newvars, significances, kind='cubic')
-        res = scipy.optimize.minimize(f, [-2], bounds=[(newvars[0] + 1e-1, newvars[-1] - 1e-1)])
+        max_sig = np.amin(significances)
+        significances_list = list(significances)
+        i = significances_list.index(max_sig)
+        min_i, max_i = [max(0,i-4),min(len(significances),i+5)]
+        f = scipy.interpolate.interp1d(newvars[min_i:max_i], significances[min_i:max_i], kind='cubic')
+        res = scipy.optimize.minimize(f, [0.5 * (newvars[min_i] + newvars[max_i-1])], bounds=[(newvars[min_i] + 1e-1, newvars[max_i-1] - 1e-1)])
 
         # computing significance, tpr, fpr for optimized threshold
         best_threshold = self.newvar2thresh(res.x[0])
@@ -381,9 +389,9 @@ class bcml_model:
         conv = 10**15 / 10**12
         if sepbg:
             bg = np.sum(np.multiply(bg_cs, fpr))
-            coef = [-tpr**2 * lumi**2 * conv**2, sig**2 * tpr * lumi * conv, sig**2 * bg * lumi * conv]
+            coef = [-tpr**2 * lumi * conv**2, sig**2 * tpr * conv, sig**2 * bg * conv]
         else:
-            coef = [-tpr**2 * lumi**2 * conv**2, sig**2 * tpr * lumi * conv, sig**2 * fpr * bg_cs * lumi * conv]
+            coef = [-tpr**2 * lumi * conv**2, sig**2 * tpr * conv, sig**2 * fpr * bg_cs * conv]
         return np.amax(np.roots(coef))
 
     def save_model(self, filename):
