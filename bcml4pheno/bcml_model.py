@@ -17,19 +17,7 @@ class bcml_model:
     """
 
     def __init__(self, model):
-                 # , train, test, num_bgs=3):
         self.model = model
-#         self.train = train
-#         self.test = test
-#         self.num_bgs = num_bgs
-#         self.train_preds = train[:,:-1]
-#         self.train_labels = np.where(train[:,-1]==1, np.ones_like(train[:,-1]), np.zeros_like(train[:,-1]))
-#         self.test_preds = test[:,:-1]
-#         self.test_labels = np.where(test[:,-1]==1, np.ones_like(test[:,-1]), np.zeros_like(test[:,-1]))
-#         self.test_bgs = [self.test[self.test[:,-1] == -i] for i in range(1,self.num_bgs+1)]
-#         self.test_bgs_preds = [data[:,:-1] for data in self.test_bgs]
-#         self.test_sigs = self.test[self.test[:,-1] == 1]
-#         self.test_sigs_preds = self.test_sigs[:,:-1]
 
     def fit(self, preds, labels):
         r"""

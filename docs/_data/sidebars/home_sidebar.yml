@@ -19,7 +19,7 @@ entries:
       title: data_vis
       url: data_vis.html
     - output: web,pdf
-      title: Full Example (WIP)
+      title: Full Example
       url: full_example.html
     - output: web,pdf
       title: Title
