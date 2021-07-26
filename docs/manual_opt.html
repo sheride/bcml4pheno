@@ -1,13 +1,13 @@
 ---
 
-title: Title
+title: manual_opt
 
 
 keywords: fastai
 sidebar: home_sidebar
 
-
-
+summary: "Functions enabling a manual optimization of signal significance for a phenomenological problem (primarily for the purposes of comparison with the performance of a machine learning algorithm)"
+description: "Functions enabling a manual optimization of signal significance for a phenomenological problem (primarily for the purposes of comparison with the performance of a machine learning algorithm)"
 nb_path: "manual_opt.ipynb"
 ---
 <!--
@@ -32,17 +32,6 @@ nb_path: "manual_opt.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -50,156 +39,20 @@ nb_path: "manual_opt.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">manual_significance</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">Bs</span><span class="p">,</span><span class="n">se</span><span class="p">,</span><span class="n">bes</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">se</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">se</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="n">B</span> <span class="o">*</span> <span class="n">be</span> <span class="k">for</span> <span class="n">B</span><span class="p">,</span> <span class="n">be</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Bs</span><span class="p">,</span> <span class="n">bes</span><span class="p">)]))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">points2hrs</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
-    <span class="n">points2sec</span> <span class="o">=</span> <span class="mi">126</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">points</span> <span class="o">*</span> <span class="n">points2sec</span> <span class="o">*</span> <span class="mi">3600</span><span class="o">**-</span><span class="mi">1</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">maxhrs2points</span><span class="p">(</span><span class="n">maxhrs</span><span class="p">):</span>
-    <span class="n">points2sec</span> <span class="o">=</span> <span class="mi">126</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">maxhrs</span> <span class="o">*</span> <span class="mi">3600</span> <span class="o">*</span> <span class="n">points2sec</span><span class="o">**-</span><span class="mi">1</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">find_sig_dep</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">backgrounds</span><span class="p">,</span> <span class="n">numS</span><span class="p">,</span> <span class="n">numBs</span><span class="p">,</span> <span class="n">cuts</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Each row of cuts should take the form [index, isCutBelow, vals]</span>
-<span class="sd">    where &#39;index&#39; gives the index of the feature being cut on</span>
-<span class="sd">    in the signal/background data, &#39;isCutBelow&#39; is a boolean specifying</span>
-<span class="sd">    if that variable should involve removing data points below (True) or</span>
-<span class="sd">    above (False) the given values, and &#39;vals&#39; is a list of values to cut at&quot;&quot;&quot;</span>
-    
-    <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cuts</span><span class="p">]</span>
-    <span class="n">isCutBelows</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cuts</span><span class="p">]</span>
-    <span class="n">points</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cuts</span><span class="p">]))</span>
-    <span class="n">sigsize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-    <span class="n">bgsizes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span> <span class="k">for</span> <span class="n">bg</span> <span class="ow">in</span> <span class="n">backgrounds</span><span class="p">]</span>
-    <span class="n">sigs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">sigsizeprimes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">bgsizesprimes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
-        <span class="n">sigsizeprime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">,</span> <span class="n">isCutBelow</span><span class="p">,</span> <span class="ow">not</span> <span class="n">isCutBelow</span><span class="p">)</span> 
-                      <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">isCutBelow</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">isCutBelows</span><span class="p">,</span> <span class="n">point</span><span class="p">)])))</span>
-        <span class="n">bgsizesprime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">background</span><span class="p">[:,</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">val</span><span class="p">,</span> <span class="n">isCutBelow</span><span class="p">,</span> <span class="ow">not</span> <span class="n">isCutBelow</span><span class="p">)</span> 
-                      <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">isCutBelow</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">isCutBelows</span><span class="p">,</span> <span class="n">point</span><span class="p">)])))</span> <span class="k">for</span> <span class="n">background</span> <span class="ow">in</span> <span class="n">backgrounds</span><span class="p">])</span>
-        <span class="n">sigsizeprimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sigsizeprime</span><span class="p">)</span>
-        <span class="n">bgsizesprimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bgsizesprime</span><span class="p">)</span>
-        <span class="n">sigs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">manual_significance</span><span class="p">(</span><span class="n">numS</span><span class="p">,</span> <span class="n">numBs</span><span class="p">,</span> <span class="n">sigsizeprime</span><span class="o">/</span><span class="n">sigsize</span><span class="p">,</span> <span class="n">bgsizesprime</span><span class="o">/</span><span class="n">bgsizes</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">sigsizeprimes</span><span class="p">,</span> <span class="n">bgsizesprimes</span><span class="p">]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sigss</span> <span class="o">=</span> <span class="n">signal_data</span>
-<span class="n">bgss</span> <span class="o">=</span> <span class="n">background_data</span>
-<span class="n">names</span> <span class="o">=</span> <span class="n">get47Dfeatures</span><span class="p">()</span>
-<span class="n">masses</span><span class="p">,</span> <span class="n">sig_css</span><span class="p">,</span> <span class="n">bg_css</span> <span class="o">=</span> <span class="n">get_elijah_ttbarzp_cs</span><span class="p">()</span>
-<span class="n">zp_cs</span> <span class="o">=</span> <span class="n">cross_section_helper</span><span class="p">(</span><span class="n">masses</span><span class="p">,</span> <span class="n">sig_css</span><span class="p">,</span> <span class="n">bg_css</span><span class="p">,</span> <span class="n">mass_units</span><span class="o">=</span><span class="s1">&#39;GeV&#39;</span><span class="p">)</span>
-<span class="n">masses</span> <span class="o">=</span> <span class="p">[</span><span class="mi">350</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">]</span>
-<span class="n">sig_css</span> <span class="o">=</span> <span class="p">[</span><span class="n">zp_cs</span><span class="o">.</span><span class="n">sig_cs</span><span class="p">(</span><span class="n">mass</span><span class="p">)</span> <span class="k">for</span> <span class="n">mass</span> <span class="ow">in</span> <span class="n">masses</span><span class="p">]</span>
-<span class="n">conv</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">15</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">12</span> <span class="c1"># conv * lumi (in fb^{-1}) * cross sec (in pb) = # of events</span>
-<span class="n">lumi</span> <span class="o">=</span> <span class="mi">3000</span>
-<span class="n">signal_yields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">conv</span> <span class="o">*</span> <span class="n">lumi</span> <span class="o">*</span> <span class="n">sig_cs</span> <span class="k">for</span> <span class="n">sig_cs</span> <span class="ow">in</span> <span class="n">sig_css</span><span class="p">])</span>
-<span class="n">background_yields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">conv</span> <span class="o">*</span> <span class="n">lumi</span> <span class="o">*</span> <span class="n">bg_cs</span> <span class="k">for</span> <span class="n">bg_cs</span> <span class="ow">in</span> <span class="n">bg_css</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">signal_yield</span> <span class="ow">in</span> <span class="n">signal_yields</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">manual_significance</span><span class="p">(</span><span class="n">signal_yield</span><span class="p">,</span> <span class="n">background_yields</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>7.248418610012742
-2.757897361779127
-0.2855952155740879
-0.014759138609928545
-0.000260774522132171
-</pre>
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="manual_significance" class="doc_header"><code>manual_significance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L10" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>manual_significance</code>(<strong><code>S</code></strong>, <strong><code>Bs</code></strong>, <strong><code>se</code></strong>, <strong><code>bes</code></strong>)</p>
+</blockquote>
+<p>Returns signal significance given yield and efficiency for signal and background</p>
+
 </div>
+
 </div>
 
 </div>
@@ -211,34 +64,27 @@ nb_path: "manual_opt.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_before</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="n">cuts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b2&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b3&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M j1 j2&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;pT b1&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">]]]</span>
-<span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">sigsizeprimes</span><span class="p">,</span> <span class="n">bgsizesprimes</span> <span class="o">=</span> <span class="n">find_sig_dep</span><span class="p">(</span><span class="n">sigss</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bgss</span><span class="p">,</span> <span class="n">signal_yields</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">background_yields</span><span class="p">,</span> <span class="n">cuts</span><span class="p">)</span>
-<span class="n">time_after</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime: </span><span class="si">{</span><span class="n">time_after</span> <span class="o">-</span> <span class="n">time_before</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-</pre></div>
+</div>
+    {% endraw %}
 
-    </div>
-</div>
-</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>1000000 [1000000, 1000000, 1000000]
-Runtime: 134 seconds
-</pre>
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="points2hrs" class="doc_header"><code>points2hrs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>points2hrs</code>(<strong><code>points</code></strong>, <strong><code>points2sec</code></strong>=<em><code>0.168</code></em>)</p>
+</blockquote>
+<p>Returns number of hours required to compute significance for given number of points</p>
+
 </div>
+
 </div>
 
 </div>
@@ -250,28 +96,27 @@ Runtime: 134 seconds
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))])</span>
-</pre></div>
+</div>
+    {% endraw %}
 
-    </div>
-</div>
-</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>20.5630757507069
-(300, 200, 200, 200)
-</pre>
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="maxhrs2points" class="doc_header"><code>maxhrs2points</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>maxhrs2points</code>(<strong><code>maxhrs</code></strong>, <strong><code>points2sec</code></strong>=<em><code>0.168</code></em>)</p>
+</blockquote>
+<p>Returns maximal number of points capable of being computed during a given number of hours</p>
+
 </div>
+
 </div>
 
 </div>
@@ -283,33 +128,32 @@ Runtime: 134 seconds
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_before</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="n">cuts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b2&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b3&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M j1 j2&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;pT b1&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">]]]</span>
-<span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">sigsizeprimes</span><span class="p">,</span> <span class="n">bgsizesprimes</span> <span class="o">=</span> <span class="n">find_sig_dep</span><span class="p">(</span><span class="n">sigss</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">bgss</span><span class="p">,</span> <span class="n">signal_yields</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">background_yields</span><span class="p">,</span> <span class="n">cuts</span><span class="p">)</span>
-<span class="n">time_after</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime: </span><span class="si">{</span><span class="n">time_after</span> <span class="o">-</span> <span class="n">time_before</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-</pre></div>
+</div>
+    {% endraw %}
 
-    </div>
-</div>
-</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Runtime: 127 seconds
-</pre>
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="sig_grid" class="doc_header"><code>sig_grid</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sig_grid</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>)</p>
+</blockquote>
+<p>Computes signal significance for a high-dimensional grid of event selection criteria.</p>
+<p>Each row of cuts should take the form [index, isCutBelow, vals]
+where 'index' gives the index of the feature being cut on
+in the signal/background data, 'isCutBelow' is a boolean specifying
+if that variable should involve removing data points below (True) or
+above (False) the given values, and 'vals' is a list of values to cut at</p>
+
 </div>
+
 </div>
 
 </div>
@@ -321,32 +165,6 @@ Runtime: 134 seconds
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>12.293874578677672
-(400, 300, 200, 300)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -358,206 +176,19 @@ Runtime: 134 seconds
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_before</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="n">cuts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b2&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">1100</span><span class="p">,</span> <span class="mi">1200</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b3&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M j1 j2&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;pT b1&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">]]]</span>
-<span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">sigsizeprimes</span><span class="p">,</span> <span class="n">bgsizesprimes</span> <span class="o">=</span> <span class="n">find_sig_dep</span><span class="p">(</span><span class="n">sigss</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bgss</span><span class="p">,</span> <span class="n">signal_yields</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">background_yields</span><span class="p">,</span> <span class="n">cuts</span><span class="p">)</span>
-<span class="n">time_after</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime: </span><span class="si">{</span><span class="n">time_after</span> <span class="o">-</span> <span class="n">time_before</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">opt_sig</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">backgrounds</span><span class="p">,</span> <span class="n">numS</span><span class="p">,</span> <span class="n">numBs</span><span class="p">,</span> <span class="n">cuts</span><span class="p">,</span> <span class="n">num_iter</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iter</span><span class="p">):</span>
+        <span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">sig_grid</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">backgrounds</span><span class="p">,</span> <span class="n">numS</span><span class="p">,</span> <span class="n">numBs</span><span class="p">,</span> <span class="n">cuts</span><span class="p">)</span>
+        <span class="n">max_sig_pt</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">max_sig_pt</span><span class="p">):</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cuts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">val</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cuts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">min_index</span><span class="p">,</span> <span class="n">max_index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">cuts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">cuts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">min_index</span><span class="p">],</span> <span class="n">cuts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">max_index</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))],</span> <span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">)]</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Runtime: 102 seconds
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>6.22708730618894
-(900, 300, 200, 400)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_before</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="n">cuts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b2&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">1800</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">2300</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b3&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M j1 j2&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;pT b1&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]]]</span>
-<span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">sigsizeprimes</span><span class="p">,</span> <span class="n">bgsizesprimes</span> <span class="o">=</span> <span class="n">find_sig_dep</span><span class="p">(</span><span class="n">sigss</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">bgss</span><span class="p">,</span> <span class="n">signal_yields</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">background_yields</span><span class="p">,</span> <span class="n">cuts</span><span class="p">)</span>
-<span class="n">time_after</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime: </span><span class="si">{</span><span class="n">time_after</span> <span class="o">-</span> <span class="n">time_before</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Runtime: 105 seconds
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>3.1672873562345023
-(1800, 400, 200, 800)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_before</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="n">cuts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b2&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">4000</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M b1 b3&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;M j1 j2&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;pT b1&#39;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">]]]</span>
-<span class="n">points</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">sigsizeprimes</span><span class="p">,</span> <span class="n">bgsizesprimes</span> <span class="o">=</span> <span class="n">find_sig_dep</span><span class="p">(</span><span class="n">sigss</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">bgss</span><span class="p">,</span> <span class="n">signal_yields</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">background_yields</span><span class="p">,</span> <span class="n">cuts</span><span class="p">)</span>
-<span class="n">time_after</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">second</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime: </span><span class="si">{</span><span class="n">time_after</span> <span class="o">-</span> <span class="n">time_before</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Runtime: 100 seconds
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">sigs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigs</span><span class="p">))])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>1.0127164593743987
-(3500, 0, 200, 100)
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 

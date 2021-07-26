@@ -22,7 +22,7 @@ entries:
       title: Full Example
       url: full_example.html
     - output: web,pdf
-      title: Title
+      title: manual_opt
       url: manual_opt.html
     - output: web,pdf
       title: ttbarzp

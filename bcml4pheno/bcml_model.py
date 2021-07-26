@@ -69,7 +69,7 @@ class bcml_model:
         If `sepbg` is `True`, labels are assumed to take values in $\{-n,\dots,-1,1\}$ (if there are $n$ backgrounds) while
         `bg_norm` should be a list of length $n$. Backgrounds are then differentiated: a list of $2 + n$ `numpy` arrays of shape
         $?_i \times m$ are returned, containing bin edges (partitioning $[0,1]$), signal bin contents, and
-        `self.num_bgs` background bin contents.
+        $n$ background bin contents.
         """
         predictions = self.predict_proba(preds)
         sig_bins, bin_edges = np.histogram(predictions[labels==1], bins=num_bins, density=True)
