@@ -4,7 +4,6 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"bcml_model": "bcml_model.ipynb",
          "refresh_model": "bcml_model.ipynb",
-         "label_predictors": "data_preproc.ipynb",
          "get_settings": "data_vis.ipynb",
          "cross_section_helper": "data_vis.ipynb",
          "manual_significance": "manual_opt.ipynb",
@@ -18,7 +17,6 @@ index = {"bcml_model": "bcml_model.ipynb",
          "get47Dfeatures": "ttbarzp.ipynb"}
 
 modules = ["bcml_model.py",
-           "data_preproc.py",
            "data_vis.py",
            "manual_opt.py",
            "ttbarzp.py"]

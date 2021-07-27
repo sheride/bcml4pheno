@@ -146,11 +146,15 @@ nb_path: "manual_opt.ipynb"
 <h4 id="sig_grid" class="doc_header"><code>sig_grid</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sig_grid</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>)</p>
 </blockquote>
 <p>Computes signal significance for a high-dimensional grid of event selection criteria.</p>
-<p>Each row of cuts should take the form [index, isCutBelow, vals]
-where 'index' gives the index of the feature being cut on
-in the signal/background data, 'isCutBelow' is a boolean specifying
+<p><code>signal</code> should contain 2D signal data, <code>backgrounds</code> should be a list where the $i$th element
+contains 2D background data for the $i$th background type, <code>numS</code> should give signal yield,
+<code>numBs</code> should be a list of background yields for each background type, and <code>cuts</code> should
+take the following form.</p>
+<p>Each row of <code>cuts</code> should take the form [index, isCutBelow, vals]
+where <code>index</code> gives the index of the feature being cut on
+in the signal/background data, <code>isCutBelow</code> is a boolean specifying
 if that variable should involve removing data points below (True) or
-above (False) the given values, and 'vals' is a list of values to cut at</p>
+above (False) the given values, and <code>vals</code> is a list of values to cut at</p>
 
 </div>
 
@@ -180,8 +184,10 @@ above (False) the given values, and 'vals' is a list of values to cut at</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="opt_sig" class="doc_header"><code>opt_sig</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>opt_sig</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>, <strong><code>num_iter</code></strong>=<em><code>3</code></em>)</p>
+<h4 id="opt_sig" class="doc_header"><code>opt_sig</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>opt_sig</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>, <strong><code>num_iter</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
+<p>Iteratively calls <a href="/bcml4pheno/manual_opt.html#sig_grid"><code>sig_grid</code></a> with finer and finer spectra of event selection criteria
+(kinematic cuts) to check</p>
 
 </div>
 

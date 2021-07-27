@@ -23,14 +23,19 @@ def maxhrs2points(maxhrs, points2sec=126/(5**3 * 6)):
 
 # Cell
 def sig_grid(signal, backgrounds, numS, numBs, cuts):
-    """
+    r"""
     Computes signal significance for a high-dimensional grid of event selection criteria.
 
-    Each row of cuts should take the form [index, isCutBelow, vals]
-    where 'index' gives the index of the feature being cut on
-    in the signal/background data, 'isCutBelow' is a boolean specifying
+    `signal` should contain 2D signal data, `backgrounds` should be a list where the $i$th element
+    contains 2D background data for the $i$th background type, `numS` should give signal yield,
+    `numBs` should be a list of background yields for each background type, and `cuts` should
+    take the following form.
+
+    Each row of `cuts` should take the form [index, isCutBelow, vals]
+    where `index` gives the index of the feature being cut on
+    in the signal/background data, `isCutBelow` is a boolean specifying
     if that variable should involve removing data points below (True) or
-    above (False) the given values, and 'vals' is a list of values to cut at
+    above (False) the given values, and `vals` is a list of values to cut at
     """
 
     indices = [row[0] for row in cuts]
@@ -55,6 +60,10 @@ def sig_grid(signal, backgrounds, numS, numBs, cuts):
 
 # Cell
 def opt_sig(signal, backgrounds, numS, numBs, cuts, num_iter=3):
+    """
+    Iteratively calls `sig_grid` with finer and finer spectra of event selection criteria
+    (kinematic cuts) to check
+    """
     for i in range(num_iter):
         points, sigs, _, __ = sig_grid(signal, backgrounds, numS, numBs, cuts)
         max_sig_pt = points[sigs.index(max(sigs))]

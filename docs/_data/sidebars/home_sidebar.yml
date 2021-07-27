@@ -13,9 +13,6 @@ entries:
       title: bcml_model
       url: bcml_model.html
     - output: web,pdf
-      title: data_preproc
-      url: data_preproc.html
-    - output: web,pdf
       title: data_vis
       url: data_vis.html
     - output: web,pdf
