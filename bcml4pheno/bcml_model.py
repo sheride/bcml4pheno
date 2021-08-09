@@ -72,6 +72,7 @@ class bcml_model:
         $n$ background bin contents.
         """
         predictions = self.predict_proba(preds)
+        labels = np.array(labels)
         sig_bins, bin_edges = np.histogram(predictions[labels==1], bins=num_bins, density=True)
         sig_bins *= sig_norm
         if sepbg:
@@ -214,7 +215,7 @@ class bcml_model:
         """
         return np.log10(1 - thresh)
 
-    def max_allowable_threshold(self, preds, labels):
+    def max_allowable_threshold(self, preds, labels, sigYield):
         """
         Returns the highest threshold such that only labelling elements of `self.test_pred` with predicted
         probabilities higher than that threshold as signal still yields 25 signal.
@@ -222,18 +223,18 @@ class bcml_model:
         To achieve a discovery potential of $5\sigma$, even in the best case scenario ($TPR = 1, FPR = 0$) we still
         require $5^2 = 25$ signal events, hence we cannot chose a threshold so high that we do not keep at least
         25 signal events.
-
-        NOTE: this function frequently returns an extrapolation error as $25$ frequently falls outside of the
-        function interpolation range (i.e., to achieve less than 25 signal events requires coming extremely close to $1$).
         """
-        newvars = np.concatenate((np.linspace(-8, -2, 10, endpoint=False), np.linspace(-2, 0, 51, endpoint=False)))
-        probs = self.model.predict_proba(preds)[:,1]
-        predicts = np.array(
-            [np.where(probs > self.newvar2thresh(newvar),
-                      np.ones_like(probs), np.zeros_like(probs)) for newvar in newvars])
-        num_sig = [np.sum(predict[(predict == 1) & (labels == 1)]) for predict in predicts]
-        f = scipy.interpolate.interp1d(num_sig, newvars, kind='cubic')
-        return self.newvar2thresh(f(25))
+
+        sig_indx = np.where(np.array(labels)==1)[0]
+        preds = np.array(preds)[sig_indx]
+        probs = self.predict_proba(preds)
+        num_predicts = np.array(
+            [np.sum(np.where(probs > self.newvar2thresh(newvar),np.ones_like(probs), np.zeros_like(probs)))
+             for newvar in newvars])
+        num_sig_yields = (num_predicts / len(preds)) * sigYield
+        return [newvars, num_sig_yields]
+#         f = scipy.interpolate.interp1d(num_sig_yield, newvars, kind='cubic')
+#         return self.newvar2thresh(f(25))
 
     def get_tprs_fprs(self, preds, labels, sepbg=False):
         """
