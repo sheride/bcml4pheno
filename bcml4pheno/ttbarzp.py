@@ -3,6 +3,10 @@
 __all__ = ['get_elijah_ttbarzp_cs', 'get_manuel_ttbarzp_cs', 'import47Ddata', 'get47Dfeatures']
 
 # Cell
+import numpy as np
+import tensorflow as tf
+
+# Cell
 def get_elijah_ttbarzp_cs():
     r"""
     Contains cross section information produced by Elijah for $pp \to t\overline{t} \; Z'$ collider phenomenology.
@@ -31,9 +35,6 @@ def get_manuel_ttbarzp_cs():
     # background cross sections (pb)
     manuel_bg_css = [0.1339, 0.01187, 5.603]
     return [manuel_masses, manuel_sig_css, manuel_bg_css]
-
-# Cell
-import tensorflow as tf
 
 # Cell
 def import47Ddata(name):

@@ -212,7 +212,7 @@ $n$ background bin contents.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.feature_importance" class="doc_header"><code>bcml_model.feature_importance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L93" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.feature_importance</code>()</p>
+<h4 id="bcml_model.feature_importance" class="doc_header"><code>bcml_model.feature_importance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.feature_importance</code>()</p>
 </blockquote>
 <p>Returns the importance of the $M$ features used to train <code>self.model</code>.</p>
 
@@ -237,7 +237,7 @@ $n$ background bin contents.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.sorted_feature_importance" class="doc_header"><code>bcml_model.sorted_feature_importance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.sorted_feature_importance</code>(<strong><code>features</code></strong>)</p>
+<h4 id="bcml_model.sorted_feature_importance" class="doc_header"><code>bcml_model.sorted_feature_importance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L106" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.sorted_feature_importance</code>(<strong><code>features</code></strong>)</p>
 </blockquote>
 <p>Returns list of features sorted by importance.</p>
 <p>Given arguments <code>features</code> and <code>importances</code>, lists of length $M$, returns list of size $M \times 2$ where
@@ -264,7 +264,7 @@ the first column gives features and the second their associated importances, sor
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.accuracy" class="doc_header"><code>bcml_model.accuracy</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.accuracy</code>(<strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>threshold</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="bcml_model.accuracy" class="doc_header"><code>bcml_model.accuracy</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.accuracy</code>(<strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>threshold</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Computes model accuracy on a dataset ($? x m$ predictors, length $?$ labels).</p>
 <p>Returns value in $[0,1]$ giving model accuracy on the provided predictors and labels.</p>
@@ -290,7 +290,7 @@ the first column gives features and the second their associated importances, sor
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.conf_matrix" class="doc_header"><code>bcml_model.conf_matrix</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L125" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.conf_matrix</code>(<strong><code>labels</code></strong>, <strong><code>predictions</code></strong>=<em><code>None</code></em>, <strong><code>preds</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="bcml_model.conf_matrix" class="doc_header"><code>bcml_model.conf_matrix</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L126" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.conf_matrix</code>(<strong><code>labels</code></strong>, <strong><code>predictions</code></strong>=<em><code>None</code></em>, <strong><code>preds</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Computes the confusion matrix of the trained model on a dataset ($? x M$ predictors, length $?$ labels).</p>
 <p>Returns $2 \times 2$ confusion matrix using <code>sklearn.metrics.confusion_matrix</code>.</p>
@@ -318,7 +318,7 @@ If <code>labels</code> aren't provided, <code>self.test_labels</code> is used.</
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.tpr_cm" class="doc_header"><code>bcml_model.tpr_cm</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L142" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.tpr_cm</code>(<strong><code>conf_matrix</code></strong>)</p>
+<h4 id="bcml_model.tpr_cm" class="doc_header"><code>bcml_model.tpr_cm</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L143" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.tpr_cm</code>(<strong><code>conf_matrix</code></strong>)</p>
 </blockquote>
 <p>Computes the true positive rate (tpr; correctly identified signal/total signal)
 of a trained model given a confusion matrix.</p>
@@ -345,7 +345,7 @@ of a trained model given a confusion matrix.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.fpr_cm" class="doc_header"><code>bcml_model.fpr_cm</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L151" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.fpr_cm</code>(<strong><code>conf_matrix</code></strong>)</p>
+<h4 id="bcml_model.fpr_cm" class="doc_header"><code>bcml_model.fpr_cm</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.fpr_cm</code>(<strong><code>conf_matrix</code></strong>)</p>
 </blockquote>
 <p>Computes the false positive rate (fpr; misidentified background/total background)
 of a trained model given a confusion matrix.</p>
@@ -372,7 +372,7 @@ of a trained model given a confusion matrix.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.tpr" class="doc_header"><code>bcml_model.tpr</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L160" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.tpr</code>(<strong><code>labels</code></strong>, <strong><code>predictions</code></strong>=<em><code>None</code></em>, <strong><code>preds</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="bcml_model.tpr" class="doc_header"><code>bcml_model.tpr</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L161" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.tpr</code>(<strong><code>labels</code></strong>, <strong><code>predictions</code></strong>=<em><code>None</code></em>, <strong><code>preds</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Computes the true positive rate (tpr; correctly identified signal/total signal)
 of a trained model given predictions and labels (both <code>numpy</code> array of length $?$ with values in $\{0,1\}$)</p>
@@ -399,7 +399,7 @@ of a trained model given predictions and labels (both <code>numpy</code> array o
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.fpr" class="doc_header"><code>bcml_model.fpr</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L169" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.fpr</code>(<strong><code>labels</code></strong>, <strong><code>predictions</code></strong>=<em><code>None</code></em>, <strong><code>preds</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="bcml_model.fpr" class="doc_header"><code>bcml_model.fpr</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L170" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.fpr</code>(<strong><code>labels</code></strong>, <strong><code>predictions</code></strong>=<em><code>None</code></em>, <strong><code>preds</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Computes the false positive rate (fpr; misidentified background/total background)
 of a trained model given predictions and labels (both <code>numpy</code> array of length $?$ with values in $\{0,1\}$)</p>
@@ -432,7 +432,7 @@ of a trained model given predictions and labels (both <code>numpy</code> array o
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.significance" class="doc_header"><code>bcml_model.significance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L178" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.significance</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.significance" class="doc_header"><code>bcml_model.significance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L179" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.significance</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Computes signal significance of a trained model given signal and background yield.</p>
 <p>Returns a positive real number computed by
@@ -464,7 +464,7 @@ of the background types.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.newvar2thresh" class="doc_header"><code>bcml_model.newvar2thresh</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L199" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.newvar2thresh</code>(<strong><code>newvar</code></strong>)</p>
+<h4 id="bcml_model.newvar2thresh" class="doc_header"><code>bcml_model.newvar2thresh</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.newvar2thresh</code>(<strong><code>newvar</code></strong>)</p>
 </blockquote>
 <p>Helper method for <code>bcml.max_allowable_threshold()</code>, <code>bcml.get_tprs_fprs()</code>, and <code>bcml.best_threshold()</code>,
 performing change of variables from <code>newvar</code> to <code>threshold</code></p>
@@ -491,7 +491,7 @@ performing change of variables from <code>newvar</code> to <code>threshold</code
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.thresh2newvar" class="doc_header"><code>bcml_model.thresh2newvar</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.thresh2newvar</code>(<strong><code>thresh</code></strong>)</p>
+<h4 id="bcml_model.thresh2newvar" class="doc_header"><code>bcml_model.thresh2newvar</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.thresh2newvar</code>(<strong><code>thresh</code></strong>)</p>
 </blockquote>
 <p>Helper method for <code>bcml.max_allowable_threshold()</code>, <code>bcml.get_tprs_fprs()</code>, and <code>bcml.best_threshold()</code>,
 performing change of variables from <code>threshold</code> to <code>newvar</code></p>
@@ -518,15 +518,13 @@ performing change of variables from <code>threshold</code> to <code>newvar</code
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.max_allowable_threshold" class="doc_header"><code>bcml_model.max_allowable_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L217" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.max_allowable_threshold</code>(<strong><code>preds</code></strong>, <strong><code>labels</code></strong>)</p>
+<h4 id="bcml_model.max_allowable_threshold" class="doc_header"><code>bcml_model.max_allowable_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L218" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.max_allowable_threshold</code>(<strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>sigYield</code></strong>)</p>
 </blockquote>
 <p>Returns the highest threshold such that only labelling elements of <code>self.test_pred</code> with predicted
 probabilities higher than that threshold as signal still yields 25 signal.</p>
 <p>To achieve a discovery potential of $5\sigma$, even in the best case scenario ($TPR = 1, FPR = 0$) we still
 require $5^2 = 25$ signal events, hence we cannot chose a threshold so high that we do not keep at least
 25 signal events.</p>
-<p>NOTE: this function frequently returns an extrapolation error as $25$ frequently falls outside of the
-function interpolation range (i.e., to achieve less than 25 signal events requires coming extremely close to $1$).</p>
 
 </div>
 
@@ -549,7 +547,7 @@ function interpolation range (i.e., to achieve less than 25 signal events requir
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.get_tprs_fprs" class="doc_header"><code>bcml_model.get_tprs_fprs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L238" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.get_tprs_fprs</code>(<strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.get_tprs_fprs" class="doc_header"><code>bcml_model.get_tprs_fprs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L239" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.get_tprs_fprs</code>(<strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Produces (true positive rate, false positive rate) pairs for various thresholds
 for the trained model on data sets.</p>
@@ -583,7 +581,7 @@ $n$ (number of backgrounds) containing fprs for each background type for each th
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.best_threshold" class="doc_header"><code>bcml_model.best_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L288" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.best_threshold</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.best_threshold" class="doc_header"><code>bcml_model.best_threshold</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L292" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.best_threshold</code>(<strong><code>signal</code></strong>, <strong><code>background</code></strong>, <strong><code>preds</code></strong>, <strong><code>labels</code></strong>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Optimizes the threshold on a given data set ($? x M$ predictors, length $?$ labels).</p>
 
@@ -608,7 +606,7 @@ $n$ (number of backgrounds) containing fprs for each background type for each th
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.req_sig_cs" class="doc_header"><code>bcml_model.req_sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L323" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.req_sig_cs</code>(<strong><code>lumi</code></strong>, <strong><code>bg_cs</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="bcml_model.req_sig_cs" class="doc_header"><code>bcml_model.req_sig_cs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L327" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.req_sig_cs</code>(<strong><code>lumi</code></strong>, <strong><code>bg_cs</code></strong>, <strong><code>tpr</code></strong>, <strong><code>fpr</code></strong>, <strong><code>sig</code></strong>=<em><code>5</code></em>, <strong><code>sepbg</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Given a luminosity (in fb$^{-1}$), a background cross section (in pb), a true positive rate, a false positive rate,
 and a signal significance, computes the signal cross section required for the signal significance to be achieved.</p>
@@ -661,7 +659,7 @@ This is then easily solvable using the quadratic formula.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bcml_model.save_model" class="doc_header"><code>bcml_model.save_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L339" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.save_model</code>(<strong><code>filename</code></strong>)</p>
+<h4 id="bcml_model.save_model" class="doc_header"><code>bcml_model.save_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L343" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bcml_model.save_model</code>(<strong><code>filename</code></strong>)</p>
 </blockquote>
 <p>Saves the model to <code>filename.joblib</code></p>
 
@@ -686,7 +684,7 @@ This is then easily solvable using the quadratic formula.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="refresh_model" class="doc_header"><code>refresh_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L346" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>refresh_model</code>(<strong><code>model</code></strong>)</p>
+<h4 id="refresh_model" class="doc_header"><code>refresh_model</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/bcml_model.py#L350" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>refresh_model</code>(<strong><code>model</code></strong>)</p>
 </blockquote>
 <p>If this class gets updated, run this function on your already trained model to have it reflect the updated
 class without retraining being necessary.</p>

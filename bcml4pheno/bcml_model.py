@@ -259,9 +259,12 @@ class bcml_model:
         if sepbg:
             num_bgs = len(np.unique(labels)) - 1
             labelTypes = [1] + [-(i+1) for i in range(num_bgs)]
-            labelsIndices = [np.where(labels==i)[0] for i in labelTypes]
+            labelsIndices = [np.where(np.array(labels)==i)[0] for i in labelTypes]
+#             print(np.array(labelsIndices).shape)
             predss = [preds[indices] for indices in labelsIndices]
+#             print(predss[0][:10])
             probss = [self.predict_proba(preds) for preds in predss]
+#             print(probsss[0][:10])
             predictionsss = np.array(
                 [[np.where(probs > self.newvar2thresh(newvar),
                           np.ones_like(probs), np.zeros_like(probs)) for probs in probss] for newvar in newvars])
