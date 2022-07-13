@@ -57,7 +57,8 @@ class bcml_model:
             except:
                 print("self.model doesn't have a predict function")
 
-    def predict_hist(self, preds, labels, num_bins=100, sepbg=False, sig_norm=1, bg_norm=1, dataframe=False):
+    def predict_hist(self, preds, labels, num_bins=100, sepbg=False, sig_norm=1, bg_norm=1, dataframe=False,
+                     yAxisUnits='events/bin width'):
         r"""
         Constructs a histogram of predicted signal probabilities for signal and background constituents of
         a dataset ($? \times M$ `numpy` array).
@@ -70,22 +71,31 @@ class bcml_model:
         `bg_norm` should be a list of length $n$. Backgrounds are then differentiated: a list of $2 + n$ `numpy` arrays of shape
         $?_i \times m$ are returned, containing bin edges (partitioning $[0,1]$), signal bin contents, and
         $n$ background bin contents.
+
+        `yAxisUnits` accepts either the string 'events' or 'events/bin width': in the former case, histograms are generated normally
+        (using `density=True` within `np.histogram` and then multipliying bins by `sig_norm` and `bg_norm`) meaning you get the desired
+        normalization values by summing the area under the curve, while in the latter case the usual procedure is following BUT then bin heights
+        are divided by bin width, thereby ensuring that merely summing the heights of the individual bins yields the desired normalization
+        values.
         """
         predictions = self.predict_proba(preds)
         labels = np.array(labels)
         sig_bins, bin_edges = np.histogram(predictions[labels==1], bins=num_bins, density=True)
-        sig_bins *= sig_norm
+        binWidthFactor = 1/num_bins if yAxisUnits == 'events/bin width' else 1
+        sig_bins *= sig_norm * binWidthFactor
         if sepbg:
             bg_norms = bg_norm
             bg_binss = [
-                bg_norm * np.histogram(predictions[labels==-(i+1)], bins=num_bins, density=True)[0]
+                bg_norm * binWidthFactor * np.histogram(predictions[labels==-(i+1)], bins=num_bins, density=True)[0]
                 for i, bg_norm in enumerate(bg_norms)]
             if dataframe:
-                return pd.DataFrame(data=[bin_edges, sig_bins] + bg_binss, columns=['Bin Edges', 'Signal'] + ['Background {}'.format(i) for i in range(1, self.num_bgs+1)])
+                return pd.DataFrame(
+                    data=[bin_edges, sig_bins] + bg_binss,
+                    columns=['Bin Edges', 'Signal'] + ['Background {}'.format(i) for i in range(1, self.num_bgs+1)])
             else:
                 return [bin_edges, sig_bins] + bg_binss
         else:
-            bg_bins = np.histogram(predictions[labels!=1], bins=num_bins, density=True)[0]
+            bg_bins = bg_norm * binWidthFactor * np.histogram(predictions[labels!=1], bins=num_bins, density=True)[0]
             if dataframe:
                 return pd.DataFrame(data=[bin_edges, sig_bins, bg_bins], columns=['Bin Edges', 'Signal', 'Background'])
             else:
@@ -233,8 +243,8 @@ class bcml_model:
              for newvar in newvars])
         num_sig_yields = (num_predicts / len(preds)) * sigYield
         return [newvars, num_sig_yields]
-#         f = scipy.interpolate.interp1d(num_sig_yield, newvars, kind='cubic')
-#         return self.newvar2thresh(f(25))
+        # f = scipy.interpolate.interp1d(num_sig_yield, newvars, kind='cubic')
+        # return self.newvar2thresh(f(25))
 
     def get_tprs_fprs(self, preds, labels, sepbg=False):
         """
@@ -260,14 +270,10 @@ class bcml_model:
             num_bgs = len(np.unique(labels)) - 1
             labelTypes = [1] + [-(i+1) for i in range(num_bgs)]
             labelsIndices = [np.where(np.array(labels)==i)[0] for i in labelTypes]
-#             print(np.array(labelsIndices).shape)
             predss = [preds[indices] for indices in labelsIndices]
-#             print(predss[0][:10])
             probss = [self.predict_proba(preds) for preds in predss]
-#             print(probsss[0][:10])
-            predictionsss = np.array(
-                [[np.where(probs > self.newvar2thresh(newvar),
-                          np.ones_like(probs), np.zeros_like(probs)) for probs in probss] for newvar in newvars])
+            predictionsss = [np.array([np.where(probs > self.newvar2thresh(newvar),
+                          np.ones_like(probs), np.zeros_like(probs)) for probs in probss]) for newvar in newvars]
             sig_conf_matrices = [
                 self.conf_matrix(labels=np.ones_like(predictionss[0]), predictions=predictionss[0]) for predictionss in predictionsss]
             bg_conf_matricess = [

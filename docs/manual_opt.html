@@ -47,7 +47,7 @@ nb_path: "manual_opt.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="manual_significance" class="doc_header"><code>manual_significance</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L10" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>manual_significance</code>(<strong><code>S</code></strong>, <strong><code>Bs</code></strong>, <strong><code>se</code></strong>, <strong><code>bes</code></strong>)</p>
+<h4 id="manual_significance" class="doc_header"><code>manual_significance</code><a href="bcml4pheno/manual_opt.py#L10" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>manual_significance</code>(<strong><code>S</code></strong>, <strong><code>Bs</code></strong>, <strong><code>se</code></strong>, <strong><code>bes</code></strong>)</p>
 </blockquote>
 <p>Returns signal significance given yield and efficiency for signal and background</p>
 
@@ -79,7 +79,7 @@ nb_path: "manual_opt.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="points2hrs" class="doc_header"><code>points2hrs</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>points2hrs</code>(<strong><code>points</code></strong>, <strong><code>points2sec</code></strong>=<em><code>0.168</code></em>)</p>
+<h4 id="points2hrs" class="doc_header"><code>points2hrs</code><a href="bcml4pheno/manual_opt.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>points2hrs</code>(<strong><code>points</code></strong>, <strong><code>points2sec</code></strong>=<em><code>0.168</code></em>)</p>
 </blockquote>
 <p>Returns number of hours required to compute significance for given number of points</p>
 
@@ -111,7 +111,7 @@ nb_path: "manual_opt.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="maxhrs2points" class="doc_header"><code>maxhrs2points</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>maxhrs2points</code>(<strong><code>maxhrs</code></strong>, <strong><code>points2sec</code></strong>=<em><code>0.168</code></em>)</p>
+<h4 id="maxhrs2points" class="doc_header"><code>maxhrs2points</code><a href="bcml4pheno/manual_opt.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>maxhrs2points</code>(<strong><code>maxhrs</code></strong>, <strong><code>points2sec</code></strong>=<em><code>0.168</code></em>)</p>
 </blockquote>
 <p>Returns maximal number of points capable of being computed during a given number of hours</p>
 
@@ -143,7 +143,7 @@ nb_path: "manual_opt.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sig_grid" class="doc_header"><code>sig_grid</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sig_grid</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>)</p>
+<h4 id="sig_grid" class="doc_header"><code>sig_grid</code><a href="bcml4pheno/manual_opt.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sig_grid</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>)</p>
 </blockquote>
 <p>Computes signal significance for a high-dimensional grid of event selection criteria.</p>
 <p><code>signal</code> should contain 2D signal data, <code>backgrounds</code> should be a list where the $i$th element
@@ -184,7 +184,7 @@ above (False) the given values, and <code>vals</code> is a list of values to cut
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="opt_sig" class="doc_header"><code>opt_sig</code><a href="https://github.com/sheride/bcml4pheno/tree/master/bcml4pheno/manual_opt.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>opt_sig</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>, <strong><code>num_iter</code></strong>=<em><code>3</code></em>)</p>
+<h4 id="opt_sig" class="doc_header"><code>opt_sig</code><a href="bcml4pheno/manual_opt.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>opt_sig</code>(<strong><code>signal</code></strong>, <strong><code>backgrounds</code></strong>, <strong><code>numS</code></strong>, <strong><code>numBs</code></strong>, <strong><code>cuts</code></strong>, <strong><code>num_iter</code></strong>=<em><code>3</code></em>)</p>
 </blockquote>
 <p>Iteratively calls <a href="/bcml4pheno/manual_opt.html#sig_grid"><code>sig_grid</code></a> with finer and finer spectra of event selection criteria
 (kinematic cuts) to check</p>
@@ -207,5 +207,5 @@ above (False) the given values, and <code>vals</code> is a list of values to cut
     {% endraw %}
 
 </div>
- 
+
 

@@ -1,0 +1,49 @@
+package:
+  name: bcml4pheno
+  version: 0.0.9
+source:
+  sha256: 75e2d3671fbf7ecdf80434f29785c927123eb232634a8e29ce589f91de575af9
+  url: https://files.pythonhosted.org/packages/95/3e/bcc42c012403539475f1fae2400fd4b1b7e3aa933015999ba014bd94d407/bcml4pheno-0.0.9.tar.gz
+about:
+  dev_url: https://sheride.github.io
+  doc_url: https://sheride.github.io
+  home: https://sheride.github.io
+  license: Apache Software
+  license_family: APACHE
+  summary: Library for conducting, evaluating, and visualizing binary classification
+    machine learning models for physics phenomenology.
+build:
+  noarch: python
+  number: '0'
+  script: '{{ PYTHON }} -m pip install . -vv'
+extra:
+  recipe-maintainers:
+  - sheride
+requirements:
+  host:
+  - pip
+  - python
+  - packaging
+  - numpy
+  - scipy
+  - matplotlib
+  - scikit-learn
+  - pandas
+  - joblib
+  - datetime
+  - xgboost
+  run:
+  - pip
+  - python
+  - packaging
+  - numpy
+  - scipy
+  - matplotlib
+  - scikit-learn
+  - pandas
+  - joblib
+  - datetime
+  - xgboost
+test:
+  imports:
+  - bcml4pheno
